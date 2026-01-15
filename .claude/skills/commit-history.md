@@ -21,6 +21,17 @@ git config user.email "nikolasdssantana@gmail.com"
 PADRÃO DE COMMIT (obrigatório):
 "EMOJI tipo: descrição"
 
+Emojis por tipo:
+
+- ✨ feat (nova funcionalidade)
+- 🐛 fix (correção de bug)
+- 📝 docs (documentação)
+- 🎨 style (formatação)
+- ♻️ refactor (refatoração)
+- ✅ test (testes)
+- ⚙️ config (configuração)
+- 🔧 chore (manutenção)
+
 Exemplo válido:
 "✨ feat: add Toast component"
 
