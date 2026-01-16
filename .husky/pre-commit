@@ -1,1 +1,2 @@
+# Run lint-staged before commit to ensure code quality
 pnpm exec lint-staged
