@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+@theme {
+  /* Typography - Plus Jakarta Sans */
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  /* Base Colors - Dark Premium */
+  --color-background: hsl(220 10% 5%);
+  --color-foreground: hsl(210 15% 95%);
+  --color-card: hsl(210 10% 9%);
+  --color-card-foreground: hsl(210 15% 95%);
+  --color-popover: hsl(210 10% 9%);
+  --color-popover-foreground: hsl(210 15% 95%);
+
+  /* Primary - Steel Blue #6193A4 */
+  --color-primary: hsl(195 27% 51%);
+  --color-primary-foreground: hsl(210 10% 5%);
+
+  /* Accent - Vibrant Teal (complementar frio) */
+  --color-accent: hsl(185 55% 42%);
+  --color-accent-foreground: hsl(210 15% 95%);
+
+  /* Secondary & Muted - Cool Slate */
+  --color-secondary: hsl(210 10% 12%);
+  --color-secondary-foreground: hsl(210 15% 95%);
+  --color-muted: hsl(210 10% 12%);
+  --color-muted-foreground: hsl(210 8% 55%);
+
+  /* Borders & Inputs */
+  --color-border: hsl(210 10% 14%);
+  --color-input: hsl(210 10% 9%);
+  --color-ring: hsl(195 27% 51%);
+
+  /* Destructive State */
+  --color-destructive: hsl(0 72% 51%);
+  --color-destructive-foreground: hsl(210 15% 95%);
+
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.75rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    margin: 0;
+    background-color: hsl(210 10% 5%);
+    color: hsl(210 15% 95%);
+  }
+
+  /* Editorial Typography */
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  h1 {
+    font-weight: 800;
+  }
+}
+
+@layer components {
+  /* Premium Glow Background - Steel Blue */
+  .bg-glow {
+    background:
+      radial-gradient(
+        ellipse 80% 50% at 50% 100%,
+        hsl(195 27% 51% / 0.08) 0%,
+        transparent 60%
+      ),
+      hsl(210 10% 5%);
+  }
+
+  .bg-glow-top {
+    background:
+      radial-gradient(
+        ellipse 80% 50% at 50% 0%,
+        hsl(195 27% 51% / 0.06) 0%,
+        transparent 50%
+      ),
+      hsl(210 10% 5%);
+  }
+
+  .bg-glow-center {
+    background:
+      radial-gradient(
+        ellipse 60% 40% at 50% 50%,
+        hsl(195 27% 51% / 0.07) 0%,
+        transparent 70%
+      ),
+      hsl(210 10% 5%);
+  }
+
+  /* Badge Style - Transparent Primary */
+  .badge-primary {
+    background: hsl(195 27% 51% / 0.15);
+    color: hsl(195 35% 60%);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .badge-accent {
+    background: hsl(185 55% 42% / 0.15);
+    color: hsl(185 60% 55%);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  /* Card with subtle border */
+  .card-elevated {
+    background: hsl(210 10% 9%);
+    border: 1px solid hsl(210 10% 14%);
+    border-radius: 0.625rem;
+  }
+}
+
+@layer utilities {
+  /* Text gradient for special headings - Steel Blue */
+  .text-gradient-primary {
+    background: linear-gradient(135deg, hsl(195 27% 51%) 0%, hsl(195 35% 65%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Subtle glow on hover - Steel Blue */
+  .glow-hover {
+    transition: box-shadow 0.3s ease;
+  }
+
+  .glow-hover:hover {
+    box-shadow: 0 0 30px hsl(195 27% 51% / 0.25);
+  }
+
+  /* Primary button states */
+  .btn-primary-hover {
+    background-color: hsl(195 30% 58%);
+  }
+
+  .btn-primary-active {
+    background-color: hsl(195 25% 45%);
+  }
+}
