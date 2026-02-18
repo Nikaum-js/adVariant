@@ -43,7 +43,7 @@ export async function generateVariations(
       {
         role: 'system',
         content:
-          'Você é um especialista em copywriting para anúncios digitais. Sempre responda em JSON válido.',
+          'Você é um copywriter especialista em anúncios digitais. REGRA CRÍTICA: NUNCA exceda os limites de caracteres - textos acima do limite são AUTOMATICAMENTE REJEITADOS e desperdiçam o trabalho. Conte os caracteres ANTES de responder. Sempre responda em JSON válido.',
       },
       {
         role: 'user',
@@ -64,17 +64,25 @@ export async function generateVariations(
     const parsed = JSON.parse(content)
     const variations: ParsedVariation[] = parsed.variations || parsed.variacoes || []
 
-    return variations.map((v) => ({
-      id: v.id,
-      headline: v.headline,
-      description: v.description,
-      strategy: v.strategy,
-      charCount: {
-        headline: v.headline.length,
-        description: v.description.length,
-      },
-      status: 'pending' as const,
-    }))
+    return variations.map((v) => {
+      const headlineLength = v.headline.length
+      const descriptionLength = v.description.length
+      const isOverLimit =
+        headlineLength > channelRules.headlineLimit ||
+        descriptionLength > channelRules.descriptionLimit
+
+      return {
+        id: v.id,
+        headline: v.headline,
+        description: v.description,
+        strategy: v.strategy,
+        charCount: {
+          headline: headlineLength,
+          description: descriptionLength,
+        },
+        status: isOverLimit ? ('rejected' as const) : ('pending' as const),
+      }
+    })
   } catch {
     throw new Error('Erro ao processar resposta da API. Tente novamente.')
   }
@@ -93,6 +101,77 @@ function getToneDescription(tone: string): string {
   return tones[tone] || tone
 }
 
+/**
+ * Calcula o limite efetivo com margem proporcional ao tamanho
+ * Limites menores precisam de mais margem, limites maiores precisam de menos
+ */
+function getEffectiveLimit(limit: number): number {
+  if (limit <= 40) {
+    return Math.floor(limit * 0.85) // 15% margem
+  } else if (limit <= 100) {
+    return Math.floor(limit * 0.9) // 10% margem
+  } else {
+    return Math.floor(limit * 0.95) // 5% margem
+  }
+}
+
+/**
+ * Gera exemplos few-shot calibrados por canal
+ * Exemplos usam ~70% do limite para mostrar o tamanho esperado
+ */
+function generateFewShotExamples(headlineLimit: number): string {
+  let examples: { headline: string; description: string }[]
+
+  if (headlineLimit <= 30) {
+    // Google Ads - exemplos curtos
+    examples = [
+      {
+        headline: 'Economize 50% hoje',
+        description: 'Oferta por tempo limitado. Aproveite agora e garanta seu desconto exclusivo.',
+      },
+      {
+        headline: 'Frete grátis Brasil',
+        description: 'Compre online e receba em casa sem custo adicional. Entrega rápida.',
+      },
+    ]
+  } else if (headlineLimit <= 45) {
+    // Meta Ads - exemplos médios
+    examples = [
+      {
+        headline: 'Descubra como economizar 50% hoje',
+        description:
+          'Milhares já aproveitaram nossa oferta especial. Não perca essa oportunidade única de transformar sua vida.',
+      },
+      {
+        headline: 'Transforme sua rotina em apenas 7 dias',
+        description:
+          'Programa completo para você alcançar seus objetivos. Comece sua jornada de sucesso agora mesmo.',
+      },
+    ]
+  } else {
+    // LinkedIn Ads - exemplos mais longos
+    examples = [
+      {
+        headline: 'Descubra como profissionais de sucesso alcançam resultados extraordinários',
+        description:
+          'Mais de 10.000 executivos já transformaram suas carreiras com nossa metodologia exclusiva. Junte-se a eles e acelere seu crescimento.',
+      },
+      {
+        headline: 'A solução completa que sua empresa precisa para crescer em 2024',
+        description:
+          'Ferramenta completa para gestão de equipes e projetos. Aumente a produtividade do seu time em até 40% com nosso método comprovado.',
+      },
+    ]
+  }
+
+  return examples
+    .map(
+      (ex, i) =>
+        `${i + 1}. Headline: "${ex.headline}" (${ex.headline.length} chars) | Descrição: "${ex.description}" (${ex.description.length} chars)`
+    )
+    .join('\n')
+}
+
 function buildPrompt(
   briefing: Briefing,
   config: GenerationConfig,
@@ -106,49 +185,57 @@ function buildPrompt(
   const forbiddenWords =
     briefing.forbiddenWords.length > 0 ? briefing.forbiddenWords.join(', ') : 'nenhuma especificada'
 
+  // Usa limite efetivo com margem proporcional ao tamanho do limite
+  const effectiveHeadlineLimit = getEffectiveLimit(channelRules.headlineLimit)
+  const effectiveDescLimit = getEffectiveLimit(channelRules.descriptionLimit)
+
+  const fewShotExamples = generateFewShotExamples(channelRules.headlineLimit)
+
   return `
 Gere ${config.quantity} variações de copy para ${channelRules.name}.
 
-## BRIEFING
-- **Produto/Serviço:** ${briefing.product}
-- **Público-alvo:** ${briefing.targetAudience}
-- **Objetivo:** ${briefing.objective}
-- **Diferenciais:** ${briefing.differentials}
+## ⚠️ LIMITES OBRIGATÓRIOS - SERÃO REJEITADOS SE EXCEDER
+- Headline: MÁXIMO ${effectiveHeadlineLimit} caracteres (CONTE ANTES DE ESCREVER)
+- Descrição: MÁXIMO ${effectiveDescLimit} caracteres (CONTE ANTES DE ESCREVER)
 
-## REGRAS DO CANAL
-- Headline: MÁXIMO ${channelRules.headlineLimit} caracteres (OBRIGATÓRIO)
-- Descrição: MÁXIMO ${channelRules.descriptionLimit} caracteres (OBRIGATÓRIO)
+ATENÇÃO: Qualquer texto acima desses limites será AUTOMATICAMENTE DESCARTADO.
+Verifique a contagem de CADA variação antes de incluir no JSON.
+
+## EXEMPLOS DE TAMANHO CORRETO
+${fewShotExamples}
+
+Seus textos devem ter tamanho SIMILAR aos exemplos acima.
+Utilize bem o espaço disponível, mas NUNCA ultrapasse os limites.
+
+## BRIEFING
+- Produto: ${briefing.product}
+- Público: ${briefing.targetAudience}
+- Objetivo: ${briefing.objective}
+- Diferenciais: ${briefing.differentials}
 
 ## RESTRIÇÕES
 - Palavras obrigatórias: ${requiredKeywords}
 - Palavras proibidas: ${forbiddenWords}
 
-## TOM DE VOZ
+## TOM
 ${getToneDescription(config.tone)}
 
-## ESTRATÉGIAS DE PERSUASÃO (use uma diferente para cada variação)
-- social_proof: Prova social, números, depoimentos
-- direct_benefit: Benefício direto e claro
-- scarcity: Escassez e urgência
+## ESTRATÉGIAS (use uma diferente por variação)
+- social_proof: Prova social
+- direct_benefit: Benefício direto
+- scarcity: Escassez/urgência
 - provocative_question: Pergunta provocativa
-- authority: Autoridade e credibilidade
-- transformation: Transformação antes/depois
+- authority: Autoridade
+- transformation: Transformação
 
-## INSTRUÇÕES IMPORTANTES
-1. Cada variação DEVE usar uma estratégia diferente
-2. NUNCA ultrapasse os limites de caracteres
-3. Conte os caracteres com precisão
-4. Inclua a estratégia usada em cada variação
-
-Responda APENAS com JSON válido no formato:
+Responda APENAS com JSON:
 {
   "variations": [
     {
       "id": 1,
-      "headline": "Texto do headline aqui",
-      "description": "Texto da descrição aqui",
-      "strategy": "scarcity",
-      "charCount": { "headline": 25, "description": 87 }
+      "headline": "Texto curto",
+      "description": "Descrição curta",
+      "strategy": "scarcity"
     }
   ]
 }
