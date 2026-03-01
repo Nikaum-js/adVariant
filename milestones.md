@@ -451,35 +451,35 @@
 
 ### Setup do framework
 
-- [ ] Instalar Vitest:
-  - [ ] `vitest`
-  - [ ] `@vitest/ui` (interface visual)
-  - [ ] `jsdom` (simular DOM)
-- [ ] Instalar React Testing Library:
-  - [ ] `@testing-library/react`
-  - [ ] `@testing-library/jest-dom`
-  - [ ] `@testing-library/user-event`
-- [ ] Criar `vitest.config.ts`:
-  - [ ] Configurar `environment: 'jsdom'`
-  - [ ] Configurar `globals: true`
-  - [ ] Configurar `setupFiles`
-- [ ] Criar `src/test/setup.ts` com matchers do jest-dom
-- [ ] Adicionar scripts no package.json:
-  - [ ] `"test": "vitest"`
-  - [ ] `"test:ui": "vitest --ui"`
-  - [ ] `"test:run": "vitest run"`
-  - [ ] `"test:coverage": "vitest --coverage"`
+- [x] Instalar Vitest:
+  - [x] `vitest`
+  - [x] `@vitest/ui` (interface visual)
+  - [x] `jsdom` (simular DOM)
+- [x] Instalar React Testing Library:
+  - [x] `@testing-library/react`
+  - [x] `@testing-library/jest-dom`
+  - [x] `@testing-library/user-event`
+- [x] Criar `vitest.config.ts`:
+  - [x] Configurar `environment: 'jsdom'`
+  - [x] Configurar `globals: true`
+  - [x] Configurar `setupFiles`
+- [x] Criar `src/test/setup.ts` com matchers do jest-dom
+- [x] Adicionar scripts no package.json:
+  - [x] `"test": "vitest"`
+  - [x] `"test:ui": "vitest --ui"`
+  - [x] `"test:run": "vitest run"`
+  - [x] `"test:coverage": "vitest --coverage"`
 
 ### Testes unitários (obrigatório)
 
-- [ ] Testar schemas Zod:
-  - [ ] `briefingSchema` — validações corretas/incorretas
-  - [ ] `generationConfigSchema` — canais e tons válidos
-- [ ] Testar `src/lib/channelRules.ts`:
-  - [ ] Limites de caracteres por canal
-- [ ] Testar `src/services/export.ts`:
-  - [ ] Geração de CSV com dados corretos
-  - [ ] Filtro de variações aprovadas
+- [x] Testar schemas Zod:
+  - [x] `briefingSchema` — validações corretas/incorretas
+  - [x] `generationConfigSchema` — canais e tons válidos
+- [x] Testar `src/lib/channelRules.ts`:
+  - [x] Limites de caracteres por canal
+- [x] Testar `src/services/export.ts`:
+  - [x] Geração de CSV com dados corretos
+  - [x] Filtro de variações aprovadas
 
 ### Testes de componentes (obrigatório)
 
@@ -487,17 +487,17 @@
   - [ ] Renderiza todos os campos
   - [ ] Validação exibe erros inline
   - [ ] Submit só habilitado quando válido
-- [ ] Testar `ChannelSelector.tsx`:
-  - [ ] Seleção altera estado
-  - [ ] Exibe limites corretos
-- [ ] Testar `VariationCard.tsx`:
-  - [ ] Aprovar muda status para 'approved'
-  - [ ] Reprovar muda status para 'rejected'
-  - [ ] Badge exibe estratégia correta
-- [ ] Testar `CharCounter.tsx`:
-  - [ ] Verde quando < 90% do limite
-  - [ ] Amarelo quando 90-100%
-  - [ ] Vermelho quando > 100%
+- [x] Testar `ChannelSelector.tsx`:
+  - [x] Seleção altera estado
+  - [x] Exibe limites corretos
+- [x] Testar `VariationCard.tsx`:
+  - [x] Aprovar muda status para 'approved'
+  - [x] Reprovar muda status para 'rejected'
+  - [x] Badge exibe estratégia correta
+- [x] Testar `CharCounter.tsx`:
+  - [x] Verde quando < 90% do limite
+  - [x] Amarelo quando 90-100%
+  - [x] Vermelho quando > 100%
 
 ### Testes de integração (opcional MVP)
 
@@ -506,9 +506,9 @@
 
 **Critério de aceite M10**
 
-- [ ] `pnpm test:run` passa sem falhas
+- [x] `pnpm test:run` passa sem falhas (115 testes)
 - [ ] Coverage ≥ 70% em schemas e utils
-- [ ] Componentes core testados
+- [x] Componentes core testados
 
 ---
 
@@ -597,6 +597,160 @@
 - [ ] Verificar responsividade mobile
 - [ ] M8 — Polimento (UX + Performance) restante
 - [ ] M9 — Deploy
+
+---
+
+### [2026-03-29] — Sessão 4.6 (StepIndicator e LoadingScreen Animados)
+
+**Concluído:**
+
+- [x] **Correção de Erros React**
+  - Corrigido erro "controlled to uncontrolled" no Select do BriefingForm
+  - Corrigido erro "Plus is not defined" mudando para RefreshCw
+
+- [x] **Novo StepIndicator Animado (`src/components/ui/step-indicator.tsx`)**
+  - Componente refatorado com framer-motion
+  - Círculos com gradiente quando step completo
+  - Pulse ring animado para step ativo
+  - Ícone Check com animação de entrada
+  - Conector com preenchimento animado (gradient)
+  - Labels sempre visíveis e responsivos
+
+- [x] **Novo LoadingScreen Animado (`src/components/ui/loading-screen.tsx`)**
+  - Instalado framer-motion
+  - Anel externo rotacionando
+  - Anel pulsante intermediário
+  - Círculo central com gradiente e scale animation
+  - Ícone Sparkles com rotação
+  - 6 partículas flutuantes animadas
+  - Dots de progresso pulsantes
+  - AnimatedHints: textos que rotacionam automaticamente
+
+- [x] **Cleanup App.tsx**
+  - Removido componentes StepIndicator e StepConnector locais (antigos)
+  - Importando novos componentes de @/components/ui/
+
+**Build:** `pnpm build` passou sem erros
+**Testes:** `pnpm test:run` — 115 testes passando
+
+---
+
+### [2026-03-28] — Sessão 4.5 (Testes Unitários e Integração)
+
+**Concluído:**
+
+- [x] **Setup de Testes**
+  - Vitest instalado e configurado
+  - React Testing Library configurada
+  - `vitest.config.ts` criado com jsdom e path aliases
+  - `src/test/setup.ts` com mocks globais
+  - `src/test/utils.tsx` com render customizado e providers
+
+- [x] **Scripts de Teste**
+  - `pnpm test` — modo watch
+  - `pnpm test:run` — execução única
+  - `pnpm test:ui` — interface visual
+  - `pnpm test:coverage` — cobertura
+
+- [x] **115 Testes Implementados:**
+  - **Schemas (21 testes):** briefingSchema, generationConfigSchema
+  - **Channel Rules (14 testes):** CHANNEL_RULES, getChannelRules, isWithinLimit, getCharCountStatus
+  - **Export Service (6 testes):** copyApprovedToClipboard com todos os cenários
+  - **CharCounter (7 testes):** cores por porcentagem, display, classes
+  - **VariationCard (17 testes):** status badges, botões, callbacks, estratégias
+  - **VariationGrid (10 testes):** filtros, contagens, callbacks
+  - **ChannelSelector (9 testes):** renderização, limites, seleção
+  - **ToneSelector (5 testes):** todos os tons, descrições
+  - **QuantitySelector (7 testes):** todas as quantidades
+  - **Button (7 testes):** variantes, sizes, disabled, click
+  - **Badge (9 testes):** todas as variantes
+  - **Card (9 testes):** variantes, subcomponentes
+
+- [x] **Header Removido**
+  - Header completamente removido conforme solicitado
+
+- [x] **Footer Atualizado**
+  - "Human Technical Test" em estilo discreto
+
+**Build:** `pnpm build` passou sem erros
+**Testes:** `pnpm test:run` — 115 testes passando
+
+---
+
+### [2026-03-28] — Sessão 4.4 (Header/Footer Minimal)
+
+**Concluído:**
+
+- [x] **Header Minimalista**
+  - Apenas logo em texto com gradiente ("advariant")
+  - Tracking tighter para visual moderno
+  - Botão "Novo" com ícone Plus (simplificado)
+  - Removido ícone Sparkles do header
+
+- [x] **Footer Atualizado**
+  - Removido "Powered by DeepSeek AI"
+  - Substituído por "Human Technical Test"
+  - Estilo discreto (10px, uppercase, tracking widest)
+  - Removida borda superior
+
+**Build:** `pnpm build` passou sem erros
+
+---
+
+### [2026-03-28] — Sessão 4.3 (Tooltips e UX)
+
+**Concluído:**
+
+- [x] **Sistema de Tooltips**
+  - Instalado componente `tooltip` do shadcn/ui
+  - Estilizado com glassmorphism (glass-card)
+  - Adicionado `TooltipProvider` no main.tsx
+
+- [x] **Ajuda Contextual nos Campos (Help Icons)**
+  - Criado componente `FieldHelp` com ícone HelpCircle
+  - Ao clicar mostra título, descrição e exemplos
+  - Adicionado em todos os campos do BriefingForm
+  - Placeholders simplificados ("Descreva aqui...", "palavra1, palavra2...")
+
+- [x] **Tooltip no Auto-preencher**
+  - Tooltip explica que é para testar o app
+  - "Preenche com dados fictícios para testar o app"
+
+- [x] **Botões Aprovar/Reprovar Melhorados**
+  - Ícones ThumbsUp/ThumbsDown ao invés de Check/X
+  - Background e borda com cores semânticas (success/destructive)
+  - Efeito hover que preenche o botão
+  - Tooltips explicativos ("Incluir na exportação", "Descartar variação")
+  - Botão resetar com texto "Voltar para pendente"
+
+**Build:** `pnpm build` passou sem erros
+
+---
+
+### [2026-03-28] — Sessão 4.2 (Header + Mock Data)
+
+**Concluído:**
+
+- [x] **Header Melhorado**
+  - Logo em gradiente dentro de box arredondado (8x8)
+  - Subtítulo "Gerador de Copies" abaixo do nome
+  - Sticky header com backdrop blur
+  - Botão "Nova geração" com ícone RefreshCw
+
+- [x] **15 Briefings Mock para Testes**
+  - Adicionado 10 novos briefings (total 15):
+    - Delivery de comida saudável
+    - Seguro pet
+    - Curso de inglês online
+    - Coworking premium
+    - Investimentos automatizados
+    - Assinatura de vinhos
+    - Clínica de estética
+    - App de finanças pessoais
+    - Móveis planejados
+  - Todos com produto, público, objetivo, diferenciais, keywords e forbidden words
+
+**Build:** `pnpm build` passou sem erros
 
 ---
 
