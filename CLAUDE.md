@@ -54,3 +54,12 @@ Briefing → Configuração → Geração com IA → Aprovação → Exportaçã
 - Google Ads (headline: 30 chars, descrição: 90 chars)
 - Meta Ads (headline: 40 chars, descrição: 125 chars)
 - LinkedIn Ads (headline: 70 chars, descrição: 150 chars)
+
+## Testes
+
+Execute os testes antes de commitar alterações significativas:
+
+```bash
+pnpm test:run    # Roda testes uma vez
+pnpm test        # Roda testes em modo watch
+```
