@@ -8,6 +8,7 @@ Antes de desenvolver qualquer funcionalidade, leia:
 
 1. **[PRODUCT.md](./PRODUCT.md)** — Regras de negócio, funcionalidades, estados da aplicação
 2. **[STACK.md](./STACK.md)** — Stack técnica, padrões de código, estrutura de pastas
+3. **[AI.md](./AI.md)** — Sistema de geração com IA (margens, prompts, few-shot examples)
 
 ## Stack Resumida
 
