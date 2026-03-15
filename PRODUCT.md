@@ -147,49 +147,68 @@ Após a aprovação, o usuário exporta apenas as variações aprovadas:
 
 ## O Prompt — O Coração do App
 
-O prompt enviado à IA é o diferencial técnico do projeto. Ele não pede "variações de copy" genericamente — ele instrui o modelo a variar a **estratégia de persuasão** em cada item:
+O prompt enviado à IA é o diferencial técnico do projeto. Ele não pede "variações de copy" genericamente — ele instrui o modelo a variar a **estratégia de persuasão** em cada item.
+
+### Sistema de Margem Dinâmica
+
+LLMs não contam caracteres com precisão. Para garantir que as copies fiquem dentro dos limites, usamos uma **margem de segurança proporcional**:
+
+| Limite real | Margem | Limite efetivo |
+|-------------|--------|----------------|
+| ≤ 40 chars  | 15%    | Ex: 30 → 25    |
+| 41-100      | 10%    | Ex: 90 → 81    |
+| > 100       | 5%     | Ex: 125 → 118  |
+
+### Few-Shot Examples por Canal
+
+O prompt inclui **exemplos calibrados** (~70% do limite) para cada canal, evitando que a IA seja conservadora demais:
+
+- **Google Ads**: headlines ~18 chars
+- **Meta Ads**: headlines ~32 chars
+- **LinkedIn Ads**: headlines ~55 chars
+
+### Estrutura do Prompt
 
 ```
-Você é um especialista em copywriting para anúncios digitais.
+## ⚠️ LIMITES OBRIGATÓRIOS - SERÃO REJEITADOS SE EXCEDER
+- Headline: MÁXIMO {limite_efetivo} caracteres (CONTE ANTES DE ESCREVER)
+- Descrição: MÁXIMO {limite_efetivo} caracteres (CONTE ANTES DE ESCREVER)
 
-Gere {N} variações de copy para o canal {CANAL}, seguindo as regras abaixo:
+ATENÇÃO: Qualquer texto acima desses limites será AUTOMATICAMENTE DESCARTADO.
 
-BRIEFING:
-- Produto/Serviço: {PRODUTO}
-- Público-alvo: {PUBLICO}
+## EXEMPLOS DE TAMANHO CORRETO
+{few_shot_examples_calibrados_por_canal}
+
+## BRIEFING
+- Produto: {PRODUTO}
+- Público: {PUBLICO}
 - Objetivo: {OBJETIVO}
 - Diferenciais: {DIFERENCIAIS}
 
-REGRAS DO CANAL:
-- Headline: máximo {X} caracteres
-- Descrição: máximo {Y} caracteres
-
-RESTRIÇÕES:
+## RESTRIÇÕES
 - Palavras obrigatórias: {KEYWORDS}
 - Palavras proibidas: {FORBIDDEN}
 
-TOM DE VOZ: {TOM}
+## TOM
+{descrição_detalhada_do_tom}
 
-INSTRUÇÕES:
-- Cada variação DEVE usar uma estratégia de persuasão diferente
-- As estratégias disponíveis são: prova social, benefício direto, escassez/urgência,
-  pergunta provocativa, autoridade, transformação
-- NUNCA ultrapasse os limites de caracteres
-- Inclua a estratégia usada em cada variação
+## ESTRATÉGIAS (use uma diferente por variação)
+- social_proof, direct_benefit, scarcity, provocative_question, authority, transformation
 
-Responda APENAS com um JSON válido no seguinte formato:
-{
-  "variations": [
-    {
-      "id": 1,
-      "headline": "...",
-      "description": "...",
-      "strategy": "escassez",
-      "charCount": { "headline": 28, "description": 87 }
-    }
-  ]
-}
+Responda APENAS com JSON válido.
 ```
+
+### Taxas de Aprovação
+
+Com o sistema de margem dinâmica e few-shot examples:
+
+| Canal        | Aprovadas | Taxa |
+|--------------|-----------|------|
+| Google Ads   | 19/20     | 95%  |
+| Meta Ads     | 15/20     | 75%  |
+| LinkedIn Ads | 20/20     | 100% |
+
+> Veja [AI.md](./AI.md) para documentação técnica completa do sistema de IA.
 
 ---
 
