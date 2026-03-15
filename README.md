@@ -1,5 +1,9 @@
 # AdVariant
 
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18.x-61dafb)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-6.x-646cff)](https://vite.dev/)
+
 Gerador inteligente de variações de copy para anúncios digitais. Do briefing às copies aprovadas em minutos.
 
 ## Como rodar localmente
