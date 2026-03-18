@@ -525,110 +525,90 @@ export const CHANNEL_RULES: Record<Channel, ChannelRules> = {
 
 ### Configuração
 
-A API do DeepSeek é compatível com o formato OpenAI:
+A API do DeepSeek é chamada via Axios com interceptors configurados em `src/lib/axios.ts`. O serviço principal está em `src/services/deepseek.ts`.
+
+### Margem Dinâmica de Caracteres
+
+LLMs não contam caracteres com precisão. Usamos uma margem proporcional ao tamanho do limite:
 
 ```typescript
 // src/services/deepseek.ts
-import type { Briefing, GenerationConfig, Variation } from '@/types'
-import { CHANNEL_RULES } from '@/types'
 
-const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions'
-
-export async function generateVariations(
-  briefing: Briefing,
-  config: GenerationConfig
-): Promise<Variation[]> {
-  const apiKey = import.meta.env.VITE_DEEPSEEK_API_KEY
-
-  if (!apiKey) {
-    throw new Error('API key não configurada')
+/**
+ * Calcula o limite efetivo com margem proporcional ao tamanho
+ * Limites menores precisam de mais margem, limites maiores precisam de menos
+ */
+function getEffectiveLimit(limit: number): number {
+  if (limit <= 40) {
+    return Math.floor(limit * 0.85) // 15% margem
+  } else if (limit <= 100) {
+    return Math.floor(limit * 0.9) // 10% margem
+  } else {
+    return Math.floor(limit * 0.95) // 5% margem
   }
-
-  const channelRules = CHANNEL_RULES[config.channel]
-  const prompt = buildPrompt(briefing, config, channelRules)
-
-  const response = await fetch(DEEPSEEK_API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: 'deepseek-chat',
-      messages: [
-        {
-          role: 'system',
-          content: 'Você é um especialista em copywriting para anúncios digitais.',
-        },
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
-      temperature: 0.8,
-      response_format: { type: 'json_object' },
-    }),
-  })
-
-  if (!response.ok) {
-    throw new Error(`Erro na API: ${response.status}`)
-  }
-
-  const data = await response.json()
-  const content = data.choices[0].message.content
-  const parsed = JSON.parse(content)
-
-  return parsed.variations.map((v: Variation) => ({
-    ...v,
-    status: 'pending' as const,
-  }))
-}
-
-function buildPrompt(
-  briefing: Briefing,
-  config: GenerationConfig,
-  channelRules: ChannelRules
-): string {
-  return `
-Gere ${config.quantity} variações de copy para ${channelRules.name}.
-
-BRIEFING:
-- Produto/Serviço: ${briefing.product}
-- Público-alvo: ${briefing.targetAudience}
-- Objetivo: ${briefing.objective}
-- Diferenciais: ${briefing.differentials}
-
-REGRAS DO CANAL:
-- Headline: máximo ${channelRules.headlineLimit} caracteres
-- Descrição: máximo ${channelRules.descriptionLimit} caracteres
-
-RESTRIÇÕES:
-- Palavras obrigatórias: ${briefing.requiredKeywords.join(', ') || 'nenhuma'}
-- Palavras proibidas: ${briefing.forbiddenWords.join(', ') || 'nenhuma'}
-
-TOM DE VOZ: ${config.tone}
-
-INSTRUÇÕES:
-- Cada variação DEVE usar uma estratégia de persuasão diferente
-- Estratégias disponíveis: social_proof, direct_benefit, scarcity, provocative_question, authority, transformation
-- NUNCA ultrapasse os limites de caracteres
-- Inclua a estratégia usada em cada variação
-
-Responda APENAS com JSON válido:
-{
-  "variations": [
-    {
-      "id": 1,
-      "headline": "...",
-      "description": "...",
-      "strategy": "scarcity",
-      "charCount": { "headline": 28, "description": 87 }
-    }
-  ]
-}
-`
 }
 ```
+
+### Few-Shot Examples por Canal
+
+Exemplos calibrados evitam que a IA seja conservadora demais:
+
+```typescript
+/**
+ * Gera exemplos few-shot calibrados por canal
+ * Exemplos usam ~70% do limite para mostrar o tamanho esperado
+ */
+function generateFewShotExamples(headlineLimit: number): string {
+  let examples: { headline: string; description: string }[]
+
+  if (headlineLimit <= 30) {
+    // Google Ads - exemplos curtos (~18 chars)
+    examples = [
+      { headline: 'Economize 50% hoje', description: '...' },
+      { headline: 'Frete grátis Brasil', description: '...' },
+    ]
+  } else if (headlineLimit <= 45) {
+    // Meta Ads - exemplos médios (~32 chars)
+    examples = [
+      { headline: 'Descubra como economizar 50% hoje', description: '...' },
+      { headline: 'Transforme sua rotina em apenas 7 dias', description: '...' },
+    ]
+  } else {
+    // LinkedIn Ads - exemplos longos (~55 chars)
+    examples = [
+      { headline: 'Descubra como profissionais de sucesso alcançam resultados extraordinários', description: '...' },
+      { headline: 'A solução completa que sua empresa precisa para crescer em 2024', description: '...' },
+    ]
+  }
+
+  return examples.map(...).join('\n')
+}
+```
+
+### System Message
+
+A system message enfatiza que textos acima do limite são rejeitados:
+
+```typescript
+{
+  role: 'system',
+  content: 'Você é um copywriter especialista em anúncios digitais. ' +
+    'REGRA CRÍTICA: NUNCA exceda os limites de caracteres - ' +
+    'textos acima do limite são AUTOMATICAMENTE REJEITADOS e desperdiçam o trabalho. ' +
+    'Conte os caracteres ANTES de responder. Sempre responda em JSON válido.',
+}
+```
+
+### Tratamento de Erros
+
+O serviço re-exporta classes de erro de `src/lib/axios.ts`:
+
+- `ApiKeyMissingError` — API key não configurada
+- `ApiKeyInvalidError` — API key inválida (401)
+- `RateLimitError` — Limite de requisições excedido (429)
+- `NetworkError` — Erro de conexão
+
+> Veja [AI.md](./AI.md) para documentação completa do sistema de IA.
 
 ---
 
