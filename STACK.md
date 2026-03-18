@@ -664,4 +664,8 @@ Não há servidor, banco de dados, autenticação ou sessão persistida remotame
 
 ---
 
+---
+
+> **Nota:** Este documento é atualizado conforme a stack evolui. Última revisão: Março 2026.
+
 _Veja [PRODUCT.md](./PRODUCT.md) para regras de negócio e funcionalidades._
