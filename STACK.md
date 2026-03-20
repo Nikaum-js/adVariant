@@ -22,21 +22,21 @@
 
 ## Visão Geral da Stack
 
-| Categoria        | Tecnologia                          |
-| ---------------- | ----------------------------------- |
-| **Framework**    | React 18 + Vite                     |
-| **Linguagem**    | TypeScript                          |
-| **Estilização**  | Tailwind CSS                        |
-| **Componentes**  | shadcn/ui                           |
-| **Ícones**       | Lucide Icons                        |
-| **Data Fetching**| TanStack Query (React Query)        |
-| **Formulários**  | TanStack Form (se complexo) ou React Hook Form |
-| **Validação**    | Zod                                 |
-| **Estado**       | React Context + TanStack Query      |
-| **IA**           | DeepSeek API (compatível OpenAI SDK)|
-| **Persistência** | localStorage (sessão local)         |
-| **Exportação**   | SheetJS (xlsx)                      |
-| **Deploy**       | Vercel / Netlify                    |
+| Categoria         | Tecnologia                                     |
+| ----------------- | ---------------------------------------------- |
+| **Framework**     | React 18 + Vite                                |
+| **Linguagem**     | TypeScript                                     |
+| **Estilização**   | Tailwind CSS                                   |
+| **Componentes**   | shadcn/ui                                      |
+| **Ícones**        | Lucide Icons                                   |
+| **Data Fetching** | TanStack Query (React Query)                   |
+| **Formulários**   | TanStack Form (se complexo) ou React Hook Form |
+| **Validação**     | Zod                                            |
+| **Estado**        | React Context + TanStack Query                 |
+| **IA**            | DeepSeek API (compatível OpenAI SDK)           |
+| **Persistência**  | localStorage (sessão local)                    |
+| **Exportação**    | SheetJS (xlsx)                                 |
+| **Deploy**        | Vercel / Netlify                               |
 
 ---
 
@@ -247,7 +247,7 @@ export function VariationCard({ variation }: { variation: Variation }) {
       </CardHeader>
       <CardContent>
         <p>{variation.description}</p>
-        <div className="flex gap-2 mt-4">
+        <div className="mt-4 flex gap-2">
           <Button variant="default">Aprovar</Button>
           <Button variant="destructive">Reprovar</Button>
         </div>
@@ -291,18 +291,18 @@ import { Check, X, RefreshCw, Download, Copy } from 'lucide-react'
 
 ### Ícones Recomendados para o App
 
-| Ação           | Ícone         |
-| -------------- | ------------- |
-| Aprovar        | `Check`       |
-| Reprovar       | `X`           |
-| Regenerar      | `RefreshCw`   |
-| Exportar CSV   | `Download`    |
-| Copiar         | `Copy`        |
-| Configurações  | `Settings`    |
-| Canal          | `Radio`       |
-| Tom de voz     | `MessageSquare` |
-| Loading        | `Loader2`     |
-| Erro           | `AlertCircle` |
+| Ação          | Ícone           |
+| ------------- | --------------- |
+| Aprovar       | `Check`         |
+| Reprovar      | `X`             |
+| Regenerar     | `RefreshCw`     |
+| Exportar CSV  | `Download`      |
+| Copiar        | `Copy`          |
+| Configurações | `Settings`      |
+| Canal         | `Radio`         |
+| Tom de voz    | `MessageSquare` |
+| Loading       | `Loader2`       |
+| Erro          | `AlertCircle`   |
 
 ---
 
@@ -354,8 +354,7 @@ interface GenerateParams {
 
 export function useGenerateVariations() {
   return useMutation({
-    mutationFn: ({ briefing, config }: GenerateParams) =>
-      generateVariations(briefing, config),
+    mutationFn: ({ briefing, config }: GenerateParams) => generateVariations(briefing, config),
     onError: (error) => {
       console.error('Erro na geração:', error)
     },
@@ -370,18 +369,21 @@ function GenerateButton() {
   const { mutate, isPending, isError, error } = useGenerateVariations()
 
   const handleGenerate = () => {
-    mutate({ briefing, config }, {
-      onSuccess: (variations) => {
-        // Atualizar estado com variações
-      },
-    })
+    mutate(
+      { briefing, config },
+      {
+        onSuccess: (variations) => {
+          // Atualizar estado com variações
+        },
+      }
+    )
   }
 
   return (
     <Button onClick={handleGenerate} disabled={isPending}>
       {isPending ? (
         <>
-          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           Gerando...
         </>
       ) : (
@@ -450,13 +452,7 @@ function safeParseBriefing(data: unknown) {
 
 export type Channel = 'google_ads' | 'meta_ads' | 'linkedin_ads'
 
-export type Tone =
-  | 'urgent'
-  | 'inspirational'
-  | 'direct'
-  | 'emotional'
-  | 'humorous'
-  | 'professional'
+export type Tone = 'urgent' | 'inspirational' | 'direct' | 'emotional' | 'humorous' | 'professional'
 
 export type Strategy =
   | 'social_proof'
@@ -555,7 +551,7 @@ export async function generateVariations(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
       model: 'deepseek-chat',
@@ -688,4 +684,4 @@ Não há servidor, banco de dados, autenticação ou sessão persistida remotame
 
 ---
 
-*Veja [PRODUCT.md](./PRODUCT.md) para regras de negócio e funcionalidades.*
+_Veja [PRODUCT.md](./PRODUCT.md) para regras de negócio e funcionalidades._

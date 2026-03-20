@@ -4,6 +4,7 @@ Retorne APENAS comandos de terminal executáveis.
 Qualquer texto fora disso é proibido.
 
 REGRAS ABSOLUTAS:
+
 - NÃO invente nome ou email
 - NÃO use valores genéricos
 - Use EXATAMENTE os valores informados abaixo
@@ -27,6 +28,7 @@ Exemplo inválido:
 "feat: ✨ add Toast component"
 
 REGRAS DE DATA:
+
 - Use GIT_AUTHOR_DATE e GIT_COMMITTER_DATE
 - Datas ALEATÓRIAS,
 - Sempre em ordem cronológica
@@ -34,6 +36,7 @@ REGRAS DE DATA:
 - Horários variados
 
 REGRAS DE COMMITS:
+
 - Micro-commits realistas
 - Projetos React / React Native
 - Caminhos de arquivos plausíveis

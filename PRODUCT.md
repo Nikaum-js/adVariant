@@ -1,6 +1,6 @@
 # AdVariant — Gerador Inteligente de Variações de Anúncio
 
-> *Do briefing às copies aprovadas em minutos, não em horas.*
+> _Do briefing às copies aprovadas em minutos, não em horas._
 
 ---
 
@@ -53,12 +53,12 @@ Sem cadastro. Sem backend. Roda direto no navegador.
 
 ## Quem Usa
 
-| Perfil                  | Momento de uso                                                                       |
-| ----------------------- | ------------------------------------------------------------------------------------ |
-| **Gestor de mídia**     | Início de campanha, quando precisa de variações pra subir no Meta Ads ou Google Ads  |
-| **Copywriter**          | Quando tem briefing em mão e precisa escalar produção                                |
-| **Analista de marketing** | Quando está configurando um teste A/B e precisa de copies estruturadas             |
-| **Dono de agência**     | Quando quer padronizar o processo de criação sem contratar mais gente                |
+| Perfil                    | Momento de uso                                                                      |
+| ------------------------- | ----------------------------------------------------------------------------------- |
+| **Gestor de mídia**       | Início de campanha, quando precisa de variações pra subir no Meta Ads ou Google Ads |
+| **Copywriter**            | Quando tem briefing em mão e precisa escalar produção                               |
+| **Analista de marketing** | Quando está configurando um teste A/B e precisa de copies estruturadas              |
+| **Dono de agência**       | Quando quer padronizar o processo de criação sem contratar mais gente               |
 
 ---
 
@@ -79,20 +79,21 @@ O usuário preenche:
 
 O app conhece as regras de cada plataforma e as aplica automaticamente:
 
-| Canal                          | Campo          | Limite                    |
-| ------------------------------ | -------------- | ------------------------- |
-| **Google Ads**                 | Headline       | 30 caracteres             |
-| **Google Ads**                 | Descrição      | 90 caracteres             |
+| Canal                             | Campo           | Limite                      |
+| --------------------------------- | --------------- | --------------------------- |
+| **Google Ads**                    | Headline        | 30 caracteres               |
+| **Google Ads**                    | Descrição       | 90 caracteres               |
 | **Meta Ads (Facebook/Instagram)** | Texto principal | 125 caracteres recomendados |
-| **Meta Ads**                   | Headline       | 40 caracteres             |
-| **LinkedIn Ads**               | Headline       | 70 caracteres             |
-| **LinkedIn Ads**               | Texto          | 150 caracteres            |
+| **Meta Ads**                      | Headline        | 40 caracteres               |
+| **LinkedIn Ads**                  | Headline        | 70 caracteres               |
+| **LinkedIn Ads**                  | Texto           | 150 caracteres              |
 
 O usuário seleciona o canal e o app garante que nenhuma variação gerada ultrapasse os limites.
 
 ### 3. Configuração de Tom e Estratégia
 
 **Tom de voz:**
+
 - Urgente / Escassez
 - Inspiracional / Aspiracional
 - Direto / Objetivo
@@ -103,6 +104,7 @@ O usuário seleciona o canal e o app garante que nenhuma variação gerada ultra
 **Quantidade de variações:** 5, 10, 15 ou 20
 
 **Estratégias de persuasão (a IA varia entre elas):**
+
 - Prova social ("Mais de 10.000 clientes confiam em...")
 - Benefício direto ("Economize X% em...")
 - Pergunta provocativa ("Ainda pagando caro por...?")
@@ -207,16 +209,16 @@ Cada estado tem uma UI correspondente. O app nunca fica em estado ambíguo.
 
 ## Tratamento de Erros
 
-| Cenário                           | Comportamento                                                          |
-| --------------------------------- | ---------------------------------------------------------------------- |
-| API key inválida                  | Toast com mensagem clara + link pra configurar                         |
-| API key ausente                   | Modal solicitando a chave antes de permitir geração                    |
-| Rate limit da API                 | Mensagem explicando e botão pra tentar novamente após cooldown         |
-| Timeout na requisição             | Retry automático (até 2x) + opção manual                               |
-| JSON malformado na resposta       | Fallback: tenta parsear parcialmente ou pede pra regenerar             |
-| Campo vazio no briefing           | Validação inline antes de habilitar o botão de gerar                   |
-| Variação ultrapassou limite chars | Badge vermelho no card, aviso antes de exportar                        |
-| Erro de rede                      | Detecta offline e sugere verificar conexão                             |
+| Cenário                           | Comportamento                                                  |
+| --------------------------------- | -------------------------------------------------------------- |
+| API key inválida                  | Toast com mensagem clara + link pra configurar                 |
+| API key ausente                   | Modal solicitando a chave antes de permitir geração            |
+| Rate limit da API                 | Mensagem explicando e botão pra tentar novamente após cooldown |
+| Timeout na requisição             | Retry automático (até 2x) + opção manual                       |
+| JSON malformado na resposta       | Fallback: tenta parsear parcialmente ou pede pra regenerar     |
+| Campo vazio no briefing           | Validação inline antes de habilitar o botão de gerar           |
+| Variação ultrapassou limite chars | Badge vermelho no card, aviso antes de exportar                |
+| Erro de rede                      | Detecta offline e sugere verificar conexão                     |
 
 ---
 
@@ -244,15 +246,15 @@ Sem cadastro, sem onboarding, sem tutorial. Abre e usa.
 
 Se o tempo permitir, estas funcionalidades aumentam o impacto:
 
-| Funcionalidade                | Descrição                                                              | Prioridade |
-| ----------------------------- | ---------------------------------------------------------------------- | ---------- |
-| **Preview visual**            | Simula como a copy ficaria em um post de Instagram ou card de Google   | Alta       |
-| **Histórico de sessão**       | Mantém as últimas gerações no localStorage                             | Alta       |
-| **Regeneração com instrução** | "Torna mais urgente" / "Remove o emoji" por variação individual        | Média      |
-| **Multi-canal simultâneo**    | Gera versões para 2+ canais ao mesmo tempo                             | Média      |
-| **Score da copy**             | A própria IA avalia e pontua cada variação (clareza, impacto, CTA)     | Baixa      |
-| **Templates de briefing**     | Briefings pré-configurados por nicho (e-commerce, SaaS, serviços)      | Baixa      |
+| Funcionalidade                | Descrição                                                            | Prioridade |
+| ----------------------------- | -------------------------------------------------------------------- | ---------- |
+| **Preview visual**            | Simula como a copy ficaria em um post de Instagram ou card de Google | Alta       |
+| **Histórico de sessão**       | Mantém as últimas gerações no localStorage                           | Alta       |
+| **Regeneração com instrução** | "Torna mais urgente" / "Remove o emoji" por variação individual      | Média      |
+| **Multi-canal simultâneo**    | Gera versões para 2+ canais ao mesmo tempo                           | Média      |
+| **Score da copy**             | A própria IA avalia e pontua cada variação (clareza, impacto, CTA)   | Baixa      |
+| **Templates de briefing**     | Briefings pré-configurados por nicho (e-commerce, SaaS, serviços)    | Baixa      |
 
 ---
 
-*Veja [STACK.md](./STACK.md) para detalhes técnicos de implementação.*
+_Veja [STACK.md](./STACK.md) para detalhes técnicos de implementação._

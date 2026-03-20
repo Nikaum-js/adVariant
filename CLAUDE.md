@@ -11,15 +11,15 @@ Antes de desenvolver qualquer funcionalidade, leia:
 
 ## Stack Resumida
 
-| Categoria       | Tecnologia                     |
-| --------------- | ------------------------------ |
-| Framework       | React 18 + Vite + TypeScript   |
-| Estilização     | Tailwind CSS                   |
-| Componentes     | shadcn/ui                      |
-| Ícones          | Lucide Icons                   |
-| Data Fetching   | TanStack Query                 |
-| Validação       | Zod                            |
-| IA              | DeepSeek API                   |
+| Categoria     | Tecnologia                   |
+| ------------- | ---------------------------- |
+| Framework     | React 18 + Vite + TypeScript |
+| Estilização   | Tailwind CSS                 |
+| Componentes   | shadcn/ui                    |
+| Ícones        | Lucide Icons                 |
+| Data Fetching | TanStack Query               |
+| Validação     | Zod                          |
+| IA            | DeepSeek API                 |
 
 ## Regras de Desenvolvimento
 
