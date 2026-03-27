@@ -532,6 +532,35 @@
 > **A IA deve atualizar esta seção SEMPRE que marcar checkboxes.**
 > Adicione uma nova entrada no topo (mais recente primeiro).
 
+### [2026-03-29] — Sessão 5 (Documentação do Sistema de IA)
+
+**Concluído:**
+
+- [x] **Atualização de Documentação**
+  - `README.md` — Substituído template Vite por README próprio do projeto
+  - `CLAUDE.md` — Adicionado link para AI.md na documentação obrigatória
+  - `PRODUCT.md` — Atualizada seção "O Prompt" com margem dinâmica e few-shot examples
+  - `STACK.md` — Atualizada seção "DeepSeek API" com código atual
+  - `AI.md` — **NOVO** arquivo de documentação técnica completa do sistema de IA
+
+- [x] **Documentação do Sistema de IA (`AI.md`)**
+  - Visão geral do sistema
+  - Margem dinâmica de caracteres (problema, solução, tabela por canal)
+  - Few-shot examples por canal (problema, solução, exemplos)
+  - Prompt engineering (system message, user prompt)
+  - Taxas de aprovação observadas (Google 95%, Meta 75%, LinkedIn 100%)
+  - Código das funções `getEffectiveLimit()` e `generateFewShotExamples()`
+  - Lista de arquivos relacionados
+
+**Build:** `pnpm build` passou sem erros
+
+**Próximos passos:**
+
+- [ ] M8 — Polimento (UX + Performance)
+- [ ] M9 — Deploy
+
+---
+
 ### [2026-03-28] — Sessão 4 (Redesign UI/UX Completo)
 
 **Concluído:**
