@@ -133,7 +133,7 @@
   - [x] **Palavras-chave obrigatórias** (input, separadas por vírgula)
   - [x] **Palavras proibidas** (input, separadas por vírgula)
 - [x] Validação inline com Zod (exibir erros nos campos)
-- [x] Estado do formulário gerenciado com useState ou React Hook Form
+- [x] Estado do formulário gerenciado com React Hook Form + zodResolver
 - [x] Botão "Próximo" só habilitado quando form válido
 
 ### Layout da página
@@ -335,12 +335,12 @@
 ### Cenários de erro (obrigatório)
 
 - [x] **API key ausente:**
-  - [x] Modal solicitando chave antes de gerar
-  - [x] Input para colar a chave
-  - [x] Salvar em localStorage
+  - [x] ~~Modal solicitando chave antes de gerar~~ (removido — usa .env)
+  - [x] ~~Input para colar a chave~~ (removido)
+  - [x] ~~Salvar em localStorage~~ (removido — configurado via ambiente)
 - [x] **API key inválida:**
   - [x] Toast com mensagem clara
-  - [x] Link/botão para reconfigurar (ícone na header)
+  - [x] ~~Link/botão para reconfigurar (ícone na header)~~ (removido — configura via .env)
 - [x] **Rate limit:**
   - [x] Mensagem explicando
   - [ ] Cooldown visual (countdown) — movido para M8
@@ -531,6 +531,116 @@
 
 > **A IA deve atualizar esta seção SEMPRE que marcar checkboxes.**
 > Adicione uma nova entrada no topo (mais recente primeiro).
+
+### [2026-03-28] — Sessão 4 (Redesign UI/UX Completo)
+
+**Concluído:**
+
+- [x] **Fase 1: Design Tokens e Sistema de Cores (`index.css`)**
+  - Adicionado tokens para Warning (`--color-warning`, `--color-warning-muted`)
+  - Adicionado tokens para Info (`--color-info`, `--color-info-muted`)
+  - Adicionado tokens para Glassmorphism (`--color-glass`, `--color-glass-border`, `--color-glass-highlight`)
+  - Adicionado token `--color-placeholder` para placeholders mais visíveis
+  - Melhorado contraste de `--color-border` e `--color-input`
+  - Criado classes `.glass` e `.glass-card` com backdrop blur
+  - Criado animações: `.animate-in`, `.hover-lift`, `.press-scale`
+  - Criado `.gradient-border-selected` para estados de seleção
+  - Criado `.pulse-ring` para step ativo
+
+- [x] **Fase 2: Componentes UI Base**
+  - `input.tsx`: Adicionado props `icon` e `error`, melhorado cores e placeholder
+  - `textarea.tsx`: Adicionado props `icon` e `error`, melhorado cores e placeholder
+  - `form-field.tsx`: NOVO componente wrapper consistente com label, erro e hint
+  - `card.tsx`: Adicionado `variant="glass"` usando cva
+  - `badge.tsx`: Adicionado variantes `success`, `success-muted`, `warning`, `warning-muted`, `info`, `info-muted`
+  - `button.tsx`: Adicionado variantes `gradient` e `success`, classe `press-scale`
+
+- [x] **Fase 3: BriefingForm**
+  - Convertido para Card glass
+  - Adicionado ícones em todos os campos (Package, Users, Target, Sparkles, Tag, Ban)
+  - Usando FormField wrapper para estrutura consistente
+  - Botão com `variant="gradient"`
+
+- [x] **Fase 4: Config Components**
+  - `ConfigStep.tsx`: Card glass com espaçamento melhorado
+  - `ChannelSelector.tsx`: Gradient border on selection, hover-lift, ícones coloridos por marca
+  - `ToneSelector.tsx`: Gradient border, containers de ícone com cores baseadas em estado
+  - `QuantitySelector.tsx`: Refatorado de buttons para cards com descrições
+
+- [x] **Fase 5: Variation Components**
+  - `CharCounter.tsx`: Cores semânticas (success/warning/destructive) - sem hardcoded
+  - `VariationCard.tsx`: Variant glass, gradient border quando aprovado, animações
+  - `VariationGrid.tsx`: Filtros como pills/chips com badges coloridos
+
+- [x] **Fase 6: StepIndicator (App.tsx)**
+  - Redesign completo com gradientes para steps completos
+  - Animação pulse para step ativo
+  - Ícone Check quando completo
+  - Linha conectora com gradiente quando step concluído
+  - Labels sempre visíveis
+
+- [x] **Fase 7: Toasts (`sonner.tsx`)**
+  - Tema dark com glassmorphism
+  - Bordas semânticas para diferentes tipos de toast
+
+- [x] **Melhorias Adicionais**
+  - Header com glass e logo gradiente
+  - Background glow no container principal
+  - Uso consistente de `.animate-in` para transições de página
+  - Todas cores hardcoded substituídas por tokens semânticos
+
+**Build:** `pnpm build` passou sem erros
+
+**Próximos passos:**
+
+- [ ] Testar visualmente todos os estados (erro, loading, sucesso)
+- [ ] Verificar responsividade mobile
+- [ ] M8 — Polimento (UX + Performance) restante
+- [ ] M9 — Deploy
+
+---
+
+### [2026-03-28] — Sessão 3 (Refatoração)
+
+**Concluído:**
+
+- [x] **Remoção do Modal de API Key**
+  - Deletado `src/components/config/ApiKeyModal.tsx`
+  - Deletado `src/lib/apiKeyStorage.ts`
+  - Simplificado `deepseek.ts` para usar apenas `VITE_DEEPSEEK_API_KEY` do `.env`
+  - Removido botão de chave do header e estados relacionados em `App.tsx`
+  - API key agora é configurada apenas pelo proprietário via ambiente
+
+- [x] **Migração para React Hook Form**
+  - Instalado `react-hook-form` e `@hookform/resolvers`
+  - Migrado `BriefingForm.tsx` de useState manual para `useForm` com `zodResolver`
+  - Migrado `ConfigStep.tsx` para usar Controllers com React Hook Form
+  - Atualizado schema Zod para compatibilidade com RHF (removido `.default([])`)
+
+- [x] **Melhorias de UI — Cores Semânticas**
+  - Adicionado tokens de cor `--color-success`, `--color-success-foreground`, `--color-success-muted` em `index.css`
+  - Adicionado classe `.badge-success` nos componentes CSS
+  - Atualizado `VariationCard.tsx` para usar `bg-success` ao invés de `bg-green-600`
+  - Atualizado `VariationGrid.tsx` para usar cores semânticas nos filtros
+
+- [x] **Correção de Segurança**
+  - Removido `.env` do tracking do Git
+  - Adicionado `.env` ao `.gitignore`
+  - Removido `.env` do histórico do Git com `filter-branch`
+
+**Pendente:**
+
+- [ ] M8 — Polimento (UX + Performance)
+- [ ] M9 — Deploy
+- [ ] M10 — Testes
+
+**Próximos passos imediatos:**
+
+- [ ] Rotacionar API key do DeepSeek (foi exposta)
+- [ ] Deploy em Vercel com variável de ambiente
+- [ ] Adicionar animações sutis
+
+---
 
 ### [2026-03-28] — Sessão 2
 
