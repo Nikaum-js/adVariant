@@ -30,6 +30,18 @@ Antes de desenvolver qualquer funcionalidade, leia:
 - Siga a estrutura de pastas definida em STACK.md
 - Path alias: `@/` aponta para `./src/`
 
+## Milestones (OBRIGATÓRIO)
+
+**Ao final de cada sessão de trabalho, SEMPRE atualize o arquivo `milestones.md`:**
+
+1. Marque os checkboxes `[x]` das tarefas concluídas
+2. Adicione uma nova entrada no "Status Atual (log)" com:
+   - Data da sessão
+   - O que foi concluído
+   - O que ficou pendente
+   - Próximos passos imediatos
+3. NUNCA apague o histórico — apenas adicione novas entradas no topo
+
 ## Fluxo do App
 
 ```
