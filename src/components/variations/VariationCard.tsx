@@ -1,7 +1,8 @@
-import { Check, X, RotateCcw } from 'lucide-react'
+import { RotateCcw, ThumbsUp, ThumbsDown } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { CharCounter } from './CharCounter'
 import { cn } from '@/lib/utils'
 import type { Variation } from '@/types'
@@ -74,20 +75,45 @@ export function VariationCard({
       <div className="flex gap-2 p-4 pt-0">
         {isPending ? (
           <>
-            <Button size="sm" variant="success" className="flex-1" onClick={onApprove}>
-              <Check className="mr-1 h-4 w-4" />
-              Aprovar
-            </Button>
-            <Button size="sm" variant="destructive" className="flex-1" onClick={onReject}>
-              <X className="mr-1 h-4 w-4" />
-              Reprovar
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="flex-1 border-success/30 bg-success/10 text-success hover:bg-success hover:text-success-foreground"
+                  onClick={onApprove}
+                >
+                  <ThumbsUp className="mr-1.5 h-4 w-4" />
+                  Aprovar
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Incluir na exportação</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="flex-1 border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                  onClick={onReject}
+                >
+                  <ThumbsDown className="mr-1.5 h-4 w-4" />
+                  Reprovar
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Descartar variação</TooltipContent>
+            </Tooltip>
           </>
         ) : (
-          <Button size="sm" variant="outline" className="flex-1" onClick={onReset}>
-            <RotateCcw className="mr-1 h-4 w-4" />
-            Resetar
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="sm" variant="ghost" className="flex-1" onClick={onReset}>
+                <RotateCcw className="mr-1.5 h-4 w-4" />
+                Voltar para pendente
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Desfazer decisão</TooltipContent>
+          </Tooltip>
         )}
       </div>
     </Card>
