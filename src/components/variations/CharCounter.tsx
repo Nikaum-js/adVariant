@@ -11,12 +11,12 @@ export function CharCounter({ current, limit, className }: CharCounterProps) {
 
   const getColorClass = () => {
     if (percentage > 100) {
-      return 'text-red-500'
+      return 'text-destructive'
     }
     if (percentage >= 90) {
-      return 'text-yellow-500'
+      return 'text-warning'
     }
-    return 'text-green-500'
+    return 'text-success'
   }
 
   return (
