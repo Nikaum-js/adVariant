@@ -29,9 +29,13 @@
   --color-muted-foreground: hsl(210 8% 55%);
 
   /* Borders & Inputs */
-  --color-border: hsl(210 10% 14%);
-  --color-input: hsl(210 10% 9%);
+  --color-border: hsl(210 10% 20%);
+  --color-input: hsl(210 10% 12%);
+  --color-input-foreground: hsl(210 15% 95%);
   --color-ring: hsl(195 27% 51%);
+
+  /* Placeholder - mais visível */
+  --color-placeholder: hsl(210 10% 50%);
 
   /* Destructive State */
   --color-destructive: hsl(0 72% 51%);
@@ -41,6 +45,21 @@
   --color-success: hsl(142 72% 42%);
   --color-success-foreground: hsl(0 0% 100%);
   --color-success-muted: hsl(142 72% 42% / 0.15);
+
+  /* Warning State */
+  --color-warning: hsl(38 92% 50%);
+  --color-warning-foreground: hsl(0 0% 0%);
+  --color-warning-muted: hsl(38 92% 50% / 0.15);
+
+  /* Info State */
+  --color-info: hsl(200 80% 55%);
+  --color-info-foreground: hsl(0 0% 100%);
+  --color-info-muted: hsl(200 80% 55% / 0.15);
+
+  /* Glassmorphism */
+  --color-glass: hsl(210 10% 12% / 0.7);
+  --color-glass-border: hsl(210 15% 25% / 0.5);
+  --color-glass-highlight: hsl(210 15% 40% / 0.3);
 
   /* Border Radius */
   --radius-sm: 0.375rem;
@@ -95,6 +114,24 @@
     background:
       radial-gradient(ellipse 60% 40% at 50% 50%, hsl(195 27% 51% / 0.07) 0%, transparent 70%),
       hsl(210 10% 5%);
+  }
+
+  /* Glassmorphism */
+  .glass {
+    background: var(--color-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--color-glass-border);
+  }
+
+  .glass-card {
+    background: hsl(210 10% 10% / 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid hsl(210 15% 20% / 0.4);
+    box-shadow:
+      0 4px 30px hsl(0 0% 0% / 0.3),
+      inset 0 1px 0 hsl(210 15% 40% / 0.2);
   }
 
   /* Badge Style - Transparent Primary */
@@ -161,5 +198,75 @@
 
   .btn-primary-active {
     background-color: hsl(195 25% 45%);
+  }
+
+  /* Animations */
+  .animate-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hover-lift {
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px hsl(0 0% 0% / 0.3);
+  }
+
+  .press-scale {
+    transition: transform 0.1s ease;
+  }
+
+  .press-scale:active {
+    transform: scale(0.98);
+  }
+
+  /* Gradient border effect for selected states */
+  .gradient-border-selected {
+    position: relative;
+  }
+
+  .gradient-border-selected::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, hsl(195 40% 55%) 0%, hsl(185 55% 45%) 100%);
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Pulse animation for active step */
+  .pulse-ring {
+    animation: pulseRing 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseRing {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 hsl(195 27% 51% / 0.4);
+    }
+    50% {
+      box-shadow: 0 0 0 4px hsl(195 27% 51% / 0);
+    }
   }
 }
