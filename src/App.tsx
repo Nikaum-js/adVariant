@@ -1,17 +1,18 @@
 import { useState } from 'react'
 import { Toaster } from '@/components/ui/sonner'
 import { toast } from 'sonner'
-import { Sparkles, Loader2, AlertCircle, RefreshCw, Download, Copy, Check } from 'lucide-react'
+import { AlertCircle, RefreshCw, Download, Copy } from 'lucide-react'
 import { exportToCSV, copyApprovedToClipboard } from '@/services/export'
 import { RateLimitError, NetworkError } from '@/services/deepseek'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { StepIndicator } from '@/components/ui/step-indicator'
+import { LoadingScreen } from '@/components/ui/loading-screen'
 import { BriefingForm } from '@/components/briefing/BriefingForm'
 import { ConfigStep } from '@/components/config/ConfigStep'
 import { VariationGrid } from '@/components/variations/VariationGrid'
 import { useGenerateVariations } from '@/hooks/useGenerateVariations'
 import { CHANNEL_RULES } from '@/lib/channelRules'
-import { cn } from '@/lib/utils'
 import type { BriefingFormData, GenerationConfigData } from '@/schemas/briefing'
 import type { Variation, VariationStatus } from '@/types'
 
@@ -115,46 +116,31 @@ function App() {
 
   return (
     <div className="bg-glow flex min-h-screen flex-col">
-      {/* Header */}
-      <header className="border-border/50 border-b">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-2">
-            <Sparkles className="text-primary h-5 w-5" />
-            <span className="text-lg font-semibold tracking-tight">AdVariant</span>
-          </div>
-          {step !== 'briefing' && (
-            <Button variant="ghost" size="sm" onClick={handleNewGeneration}>
-              Nova geração
-            </Button>
-          )}
-        </div>
-      </header>
-
       {/* Progress Indicator */}
-      <div className="border-border/50 border-b">
-        <div className="mx-auto max-w-6xl px-4 py-4">
-          <div className="flex items-center justify-center">
-            <StepIndicator
-              number={1}
-              label="Briefing"
-              isActive={step === 'briefing'}
-              isCompleted={step !== 'briefing'}
-            />
-            <StepConnector isCompleted={step !== 'briefing'} />
-            <StepIndicator
-              number={2}
-              label="Configuração"
-              isActive={step === 'config'}
-              isCompleted={step === 'generating' || step === 'review'}
-            />
-            <StepConnector isCompleted={step === 'generating' || step === 'review'} />
-            <StepIndicator
-              number={3}
-              label="Revisão"
-              isActive={step === 'generating' || step === 'review'}
-              isCompleted={step === 'review' && variations.length > 0}
-            />
-          </div>
+      <div className="border-border/50 bg-background/50 border-b backdrop-blur-sm">
+        <div className="mx-auto max-w-6xl px-4 py-6">
+          <StepIndicator
+            steps={[
+              {
+                number: 1,
+                label: 'Briefing',
+                isActive: step === 'briefing',
+                isCompleted: step !== 'briefing',
+              },
+              {
+                number: 2,
+                label: 'Configuração',
+                isActive: step === 'config',
+                isCompleted: step === 'generating' || step === 'review',
+              },
+              {
+                number: 3,
+                label: 'Revisão',
+                isActive: step === 'generating' || step === 'review',
+                isCompleted: step === 'review' && variations.length > 0,
+              },
+            ]}
+          />
         </div>
       </div>
 
@@ -177,17 +163,9 @@ function App() {
         )}
 
         {step === 'generating' && (
-          <div className="animate-in py-12 text-center">
+          <div className="animate-in">
             {generateMutation.isPending ? (
-              <>
-                <div className="from-primary/20 to-accent/20 mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br">
-                  <Loader2 className="text-primary h-10 w-10 animate-spin" />
-                </div>
-                <h2 className="text-2xl font-semibold">Gerando variações...</h2>
-                <p className="text-muted-foreground mt-2">
-                  Isso pode levar alguns segundos. Por favor, aguarde.
-                </p>
-              </>
+              <LoadingScreen />
             ) : generateMutation.isError ? (
               <Card variant="glass" className="border-destructive/30 mx-auto max-w-md">
                 <CardHeader>
@@ -239,7 +217,7 @@ function App() {
                   Exportar CSV ({approvedCount})
                 </Button>
                 <Button variant="outline" onClick={handleNewGeneration}>
-                  <Sparkles className="mr-2 h-4 w-4" />
+                  <RefreshCw className="mr-2 h-4 w-4" />
                   Nova Geração
                 </Button>
               </div>
@@ -257,64 +235,15 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-border/50 mt-auto border-t">
-        <div className="mx-auto max-w-6xl px-4 py-3">
-          <p className="text-muted-foreground text-center text-xs">Powered by DeepSeek AI</p>
+      <footer className="mt-auto">
+        <div className="mx-auto max-w-6xl px-4 py-4">
+          <p className="text-muted-foreground/50 text-center text-[10px] uppercase tracking-widest">
+            Human Technical Test
+          </p>
         </div>
       </footer>
 
       <Toaster />
-    </div>
-  )
-}
-
-interface StepIndicatorProps {
-  number: number
-  label: string
-  isActive: boolean
-  isCompleted: boolean
-}
-
-function StepIndicator({ number, label, isActive, isCompleted }: StepIndicatorProps) {
-  return (
-    <div className="flex items-center gap-3">
-      <div
-        className={cn(
-          'flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold transition-all',
-          isCompleted && 'from-primary to-accent bg-gradient-to-br text-white',
-          isActive && !isCompleted && 'bg-primary text-primary-foreground pulse-ring',
-          !isActive && !isCompleted && 'bg-muted text-muted-foreground'
-        )}
-      >
-        {isCompleted ? <Check className="h-5 w-5" /> : number}
-      </div>
-      <span
-        className={cn(
-          'text-sm font-medium',
-          isActive || isCompleted ? 'text-foreground' : 'text-muted-foreground'
-        )}
-      >
-        {label}
-      </span>
-    </div>
-  )
-}
-
-interface StepConnectorProps {
-  isCompleted: boolean
-}
-
-function StepConnector({ isCompleted }: StepConnectorProps) {
-  return (
-    <div className="mx-4 flex w-12 items-center sm:w-20">
-      <div
-        className={cn(
-          'h-0.5 w-full rounded-full transition-all',
-          isCompleted
-            ? 'from-primary to-accent bg-gradient-to-r'
-            : 'border-muted border-t-2 border-dashed'
-        )}
-      />
     </div>
   )
 }
