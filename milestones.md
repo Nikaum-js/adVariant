@@ -600,6 +600,33 @@
 
 ---
 
+### [2026-03-28] — Sessão 4.1 (Features de Teste)
+
+**Concluído:**
+
+- [x] **Botão Auto-preencher**
+  - 5 opções de briefings mock distintos (curso, app meditação, software, proteína, consultoria)
+  - Preenche todos os campos do formulário aleatoriamente
+  - Ícone Wand2 para indicar ação mágica
+
+- [x] **Intro Section na Tela Inicial**
+  - Título com gradiente "Crie copies que convertem"
+  - Descrição breve explicando o que o app faz
+  - Posicionado acima do card de briefing
+
+- [x] **Header Simplificado**
+  - Removido logo box com gradiente (cara de "vibe code")
+  - Visual minimalista com ícone + texto
+  - Botão "Nova geração" aparece quando não está no briefing
+
+- [x] **Footer Minimalista**
+  - Texto menor "Powered by DeepSeek AI"
+  - Bordas mais sutis (border/50)
+
+**Build:** `pnpm build` passou sem erros
+
+---
+
 ### [2026-03-28] — Sessão 3 (Refatoração)
 
 **Concluído:**
