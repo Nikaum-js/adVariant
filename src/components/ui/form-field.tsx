@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { AlertCircle } from 'lucide-react'
 import { Label } from '@/components/ui/label'
+import { FieldHelp } from '@/components/ui/field-help'
 import { cn } from '@/lib/utils'
 
 interface FormFieldProps {
@@ -9,6 +10,11 @@ interface FormFieldProps {
   required?: boolean
   error?: string
   hint?: string
+  help?: {
+    title: string
+    description: string
+    examples?: string[]
+  }
   children: React.ReactNode
   className?: string
 }
@@ -19,15 +25,21 @@ export function FormField({
   required,
   error,
   hint,
+  help,
   children,
   className,
 }: FormFieldProps) {
   return (
     <div className={cn('space-y-2', className)}>
-      <Label htmlFor={htmlFor} className="text-sm font-medium">
-        {label}
-        {required && <span className="text-destructive ml-1">*</span>}
-      </Label>
+      <div className="flex items-center gap-1.5">
+        <Label htmlFor={htmlFor} className="text-sm font-medium">
+          {label}
+          {required && <span className="text-destructive ml-1">*</span>}
+        </Label>
+        {help && (
+          <FieldHelp title={help.title} description={help.description} examples={help.examples} />
+        )}
+      </div>
       {children}
       {error && (
         <p className="text-destructive flex items-center gap-1.5 text-sm">
