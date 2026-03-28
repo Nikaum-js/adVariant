@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Toaster } from '@/components/ui/sonner'
 import { toast } from 'sonner'
-import { Sparkles, Loader2, AlertCircle, RefreshCw, Download, Copy } from 'lucide-react'
+import { Sparkles, Loader2, AlertCircle, RefreshCw, Download, Copy, Check } from 'lucide-react'
 import { exportToCSV, copyApprovedToClipboard } from '@/services/export'
 import { RateLimitError, NetworkError } from '@/services/deepseek'
 import { Button } from '@/components/ui/button'
@@ -11,6 +11,7 @@ import { ConfigStep } from '@/components/config/ConfigStep'
 import { VariationGrid } from '@/components/variations/VariationGrid'
 import { useGenerateVariations } from '@/hooks/useGenerateVariations'
 import { CHANNEL_RULES } from '@/lib/channelRules'
+import { cn } from '@/lib/utils'
 import type { BriefingFormData, GenerationConfigData } from '@/schemas/briefing'
 import type { Variation, VariationStatus } from '@/types'
 
@@ -113,12 +114,14 @@ function App() {
   const pendingCount = variations.filter((v) => v.status === 'pending').length
 
   return (
-    <div className="bg-background flex min-h-screen flex-col">
+    <div className="bg-glow flex min-h-screen flex-col">
       {/* Header */}
-      <header className="border-b">
+      <header className="glass border-glass-border border-b">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-2">
-            <Sparkles className="text-primary h-6 w-6" />
+            <div className="from-primary to-accent flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br">
+              <Sparkles className="h-4 w-4 text-white" />
+            </div>
             <h1 className="text-xl font-bold tracking-tight">AdVariant</h1>
           </div>
           <p className="text-muted-foreground hidden text-sm sm:block">
@@ -128,59 +131,65 @@ function App() {
       </header>
 
       {/* Progress Indicator */}
-      <div className="border-b">
-        <div className="mx-auto flex max-w-6xl items-center justify-center gap-4 px-4 py-3">
-          <StepIndicator
-            number={1}
-            label="Briefing"
-            isActive={step === 'briefing'}
-            isCompleted={step !== 'briefing'}
-          />
-          <div className="bg-border h-px w-8" />
-          <StepIndicator
-            number={2}
-            label="Configuração"
-            isActive={step === 'config'}
-            isCompleted={step === 'generating' || step === 'review'}
-          />
-          <div className="bg-border h-px w-8" />
-          <StepIndicator
-            number={3}
-            label="Revisão"
-            isActive={step === 'generating' || step === 'review'}
-            isCompleted={step === 'review' && variations.length > 0}
-          />
+      <div className="border-glass-border border-b">
+        <div className="mx-auto max-w-6xl px-4 py-4">
+          <div className="flex items-center justify-center">
+            <StepIndicator
+              number={1}
+              label="Briefing"
+              isActive={step === 'briefing'}
+              isCompleted={step !== 'briefing'}
+            />
+            <StepConnector isCompleted={step !== 'briefing'} />
+            <StepIndicator
+              number={2}
+              label="Configuração"
+              isActive={step === 'config'}
+              isCompleted={step === 'generating' || step === 'review'}
+            />
+            <StepConnector isCompleted={step === 'generating' || step === 'review'} />
+            <StepIndicator
+              number={3}
+              label="Revisão"
+              isActive={step === 'generating' || step === 'review'}
+              isCompleted={step === 'review' && variations.length > 0}
+            />
+          </div>
         </div>
       </div>
 
       {/* Main Content */}
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
         {step === 'briefing' && (
-          <BriefingForm onSubmit={handleBriefingSubmit} initialData={briefing || undefined} />
+          <div className="animate-in">
+            <BriefingForm onSubmit={handleBriefingSubmit} initialData={briefing || undefined} />
+          </div>
         )}
 
         {step === 'config' && (
-          <ConfigStep
-            onSubmit={handleConfigSubmit}
-            onBack={handleBackToBriefing}
-            initialData={config || undefined}
-          />
+          <div className="animate-in">
+            <ConfigStep
+              onSubmit={handleConfigSubmit}
+              onBack={handleBackToBriefing}
+              initialData={config || undefined}
+            />
+          </div>
         )}
 
         {step === 'generating' && (
-          <div className="py-12 text-center">
+          <div className="animate-in py-12 text-center">
             {generateMutation.isPending ? (
               <>
-                <div className="bg-muted mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
-                  <Loader2 className="text-primary h-8 w-8 animate-spin" />
+                <div className="from-primary/20 to-accent/20 mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br">
+                  <Loader2 className="text-primary h-10 w-10 animate-spin" />
                 </div>
-                <h2 className="text-xl font-semibold">Gerando variações...</h2>
+                <h2 className="text-2xl font-semibold">Gerando variações...</h2>
                 <p className="text-muted-foreground mt-2">
                   Isso pode levar alguns segundos. Por favor, aguarde.
                 </p>
               </>
             ) : generateMutation.isError ? (
-              <Card className="border-destructive/50 mx-auto max-w-md">
+              <Card variant="glass" className="border-destructive/30 mx-auto max-w-md">
                 <CardHeader>
                   <div className="flex items-center justify-center gap-2">
                     <AlertCircle className="text-destructive h-6 w-6" />
@@ -207,7 +216,7 @@ function App() {
         )}
 
         {step === 'review' && variations.length > 0 && channelRules && (
-          <div className="space-y-6">
+          <div className="animate-in space-y-6">
             {/* Stats */}
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
@@ -225,7 +234,7 @@ function App() {
                   <Copy className="mr-2 h-4 w-4" />
                   Copiar ({approvedCount})
                 </Button>
-                <Button onClick={handleExportCSV} disabled={approvedCount === 0}>
+                <Button variant="gradient" onClick={handleExportCSV} disabled={approvedCount === 0}>
                   <Download className="mr-2 h-4 w-4" />
                   Exportar CSV ({approvedCount})
                 </Button>
@@ -248,7 +257,7 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto border-t">
+      <footer className="border-glass-border mt-auto border-t">
         <div className="mx-auto max-w-6xl px-4 py-4">
           <p className="text-muted-foreground text-center text-sm">
             AdVariant — Gerador de variações de copy com IA
@@ -270,23 +279,44 @@ interface StepIndicatorProps {
 
 function StepIndicator({ number, label, isActive, isCompleted }: StepIndicatorProps) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-3">
       <div
-        className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium ${
-          isActive
-            ? 'bg-primary text-primary-foreground'
-            : isCompleted
-              ? 'bg-primary/20 text-primary'
-              : 'bg-muted text-muted-foreground'
-        }`}
+        className={cn(
+          'flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold transition-all',
+          isCompleted && 'from-primary to-accent bg-gradient-to-br text-white',
+          isActive && !isCompleted && 'bg-primary text-primary-foreground pulse-ring',
+          !isActive && !isCompleted && 'bg-muted text-muted-foreground'
+        )}
       >
-        {number}
+        {isCompleted ? <Check className="h-5 w-5" /> : number}
       </div>
       <span
-        className={`text-sm ${isActive ? 'font-medium' : 'text-muted-foreground'} hidden sm:inline`}
+        className={cn(
+          'text-sm font-medium',
+          isActive || isCompleted ? 'text-foreground' : 'text-muted-foreground'
+        )}
       >
         {label}
       </span>
+    </div>
+  )
+}
+
+interface StepConnectorProps {
+  isCompleted: boolean
+}
+
+function StepConnector({ isCompleted }: StepConnectorProps) {
+  return (
+    <div className="mx-4 flex w-12 items-center sm:w-20">
+      <div
+        className={cn(
+          'h-0.5 w-full rounded-full transition-all',
+          isCompleted
+            ? 'from-primary to-accent bg-gradient-to-r'
+            : 'border-muted border-t-2 border-dashed'
+        )}
+      />
     </div>
   )
 }
