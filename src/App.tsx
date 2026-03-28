@@ -116,22 +116,22 @@ function App() {
   return (
     <div className="bg-glow flex min-h-screen flex-col">
       {/* Header */}
-      <header className="glass border-glass-border border-b">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+      <header className="border-border/50 border-b">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
-            <div className="from-primary to-accent flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br">
-              <Sparkles className="h-4 w-4 text-white" />
-            </div>
-            <h1 className="text-xl font-bold tracking-tight">AdVariant</h1>
+            <Sparkles className="text-primary h-5 w-5" />
+            <span className="text-lg font-semibold tracking-tight">AdVariant</span>
           </div>
-          <p className="text-muted-foreground hidden text-sm sm:block">
-            Gerador de variações de copy para anúncios
-          </p>
+          {step !== 'briefing' && (
+            <Button variant="ghost" size="sm" onClick={handleNewGeneration}>
+              Nova geração
+            </Button>
+          )}
         </div>
       </header>
 
       {/* Progress Indicator */}
-      <div className="border-glass-border border-b">
+      <div className="border-border/50 border-b">
         <div className="mx-auto max-w-6xl px-4 py-4">
           <div className="flex items-center justify-center">
             <StepIndicator
@@ -257,11 +257,9 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-glass-border mt-auto border-t">
-        <div className="mx-auto max-w-6xl px-4 py-4">
-          <p className="text-muted-foreground text-center text-sm">
-            AdVariant — Gerador de variações de copy com IA
-          </p>
+      <footer className="border-border/50 mt-auto border-t">
+        <div className="mx-auto max-w-6xl px-4 py-3">
+          <p className="text-muted-foreground text-center text-xs">Powered by DeepSeek AI</p>
         </div>
       </footer>
 

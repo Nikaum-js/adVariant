@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { ArrowRight, Package, Users, Target, Sparkles, Tag, Ban } from 'lucide-react'
+import { ArrowRight, Package, Users, Target, Sparkles, Tag, Ban, Wand2 } from 'lucide-react'
 
 interface BriefingFormProps {
   onSubmit: (data: BriefingFormData) => void
@@ -28,6 +28,64 @@ const OBJECTIVES = [
   { value: 'remarketing', label: 'Remarketing (Recuperação)' },
   { value: 'launch', label: 'Lançamento (Novo produto/serviço)' },
 ] as const
+
+const MOCK_BRIEFINGS: BriefingFormData[] = [
+  {
+    product:
+      'Curso online de Marketing Digital com mais de 100 aulas, certificado reconhecido e acesso vitalício. Inclui módulos sobre tráfego pago, SEO, redes sociais e email marketing.',
+    targetAudience:
+      'Empreendedores e profissionais de marketing entre 25-45 anos que desejam aumentar suas vendas online. Pessoas com renda média-alta que valorizam educação continuada.',
+    objective: 'conversion',
+    differentials:
+      'Único curso com mentoria individual inclusa. Garantia de 30 dias. Comunidade exclusiva com +5.000 alunos ativos. Professor com 15 anos de experiência no mercado.',
+    requiredKeywords: ['transforme', 'resultados', 'agora'],
+    forbiddenWords: ['barato', 'grátis'],
+  },
+  {
+    product:
+      'App de meditação guiada com exercícios de 5 a 30 minutos. Inclui sons da natureza, técnicas de respiração e programa de 21 dias para iniciantes.',
+    targetAudience:
+      'Adultos de 30-50 anos com rotina estressante, executivos e profissionais de saúde. Pessoas que buscam equilíbrio entre vida pessoal e profissional.',
+    objective: 'leads',
+    differentials:
+      'Meditações em português com sotaque brasileiro. Modo offline disponível. Integração com Apple Health e Google Fit. Mais de 500 meditações exclusivas.',
+    requiredKeywords: ['paz', 'equilíbrio', 'bem-estar'],
+    forbiddenWords: ['ansiedade', 'problema'],
+  },
+  {
+    product:
+      'Software de gestão financeira para pequenas empresas. Controle de fluxo de caixa, emissão de boletos, relatórios automáticos e integração bancária.',
+    targetAudience:
+      'Donos de pequenas empresas e MEIs com faturamento até R$500mil/ano. Pessoas que não têm contador dedicado e precisam de organização financeira.',
+    objective: 'awareness',
+    differentials:
+      'Setup em 5 minutos sem necessidade de treinamento. Suporte via WhatsApp 24h. Plano gratuito para até 50 transações/mês. Dashboard intuitivo.',
+    requiredKeywords: ['simples', 'controle', 'lucro'],
+    forbiddenWords: ['complicado', 'burocracia'],
+  },
+  {
+    product:
+      'Proteína vegana em pó sabor chocolate com 25g de proteína por dose. Feita com ervilha e arroz, sem adoçantes artificiais e com certificação orgânica.',
+    targetAudience:
+      'Veganos e vegetarianos praticantes de musculação, crossfit ou esportes. Idade 20-40 anos, preocupados com saúde e sustentabilidade.',
+    objective: 'launch',
+    differentials:
+      'Primeira proteína vegana brasileira com certificação orgânica. Embalagem 100% reciclável. Sabor desenvolvido por chef francês. Zero açúcar adicionado.',
+    requiredKeywords: ['natural', 'performance', 'sabor'],
+    forbiddenWords: ['química', 'artificial'],
+  },
+  {
+    product:
+      'Consultoria de carreira online com análise de currículo, simulação de entrevista e plano de desenvolvimento personalizado. Sessões de 1 hora via videochamada.',
+    targetAudience:
+      'Profissionais em transição de carreira ou buscando promoção. Idade 28-45 anos com formação superior que sentem estagnação profissional.',
+    objective: 'remarketing',
+    differentials:
+      'Consultores com experiência em RH de grandes empresas. Garantia de recolocação em 90 dias ou dinheiro de volta. Acesso a banco de vagas exclusivo.',
+    requiredKeywords: ['sucesso', 'carreira', 'oportunidade'],
+    forbiddenWords: ['desemprego', 'crise'],
+  },
+]
 
 const parseCommaSeparated = (value: string): string[] => {
   return value
@@ -50,6 +108,7 @@ export function BriefingForm({ onSubmit, initialData }: BriefingFormProps) {
     control,
     formState: { errors, isValid },
     setValue,
+    reset,
   } = useForm<BriefingFormData>({
     resolver: zodResolver(briefingSchema),
     mode: 'onChange',
@@ -73,129 +132,173 @@ export function BriefingForm({ onSubmit, initialData }: BriefingFormProps) {
     setValue('forbiddenWords', parseCommaSeparated(value), { shouldValidate: true })
   }
 
+  const handleAutoFill = () => {
+    const randomIndex = Math.floor(Math.random() * MOCK_BRIEFINGS.length)
+    const mockData = MOCK_BRIEFINGS[randomIndex]
+
+    reset(mockData)
+    setKeywordsInput(mockData.requiredKeywords?.join(', ') || '')
+    setForbiddenInput(mockData.forbiddenWords?.join(', ') || '')
+  }
+
   return (
-    <Card variant="glass" className="mx-auto w-full max-w-2xl">
-      <CardHeader>
-        <CardTitle className="text-xl">Briefing do Anúncio</CardTitle>
-        <CardDescription>Preencha as informações sobre o produto e público-alvo</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            label="Produto/Serviço"
-            htmlFor="product"
-            required
-            error={errors.product?.message}
-          >
-            <Textarea
-              id="product"
-              icon={<Package className="size-4" />}
-              placeholder="Descreva o produto ou serviço que será anunciado..."
-              error={!!errors.product}
-              rows={3}
-              {...register('product')}
-            />
-          </FormField>
+    <div className="mx-auto w-full max-w-2xl space-y-6">
+      {/* Intro Section */}
+      <div className="space-y-3 text-center">
+        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+          Crie copies que <span className="text-gradient-primary">convertem</span>
+        </h2>
+        <p className="text-muted-foreground mx-auto max-w-lg text-sm sm:text-base">
+          O AdVariant usa inteligência artificial para gerar variações de anúncios otimizadas para
+          Google Ads, Meta Ads e LinkedIn. Preencha o briefing e deixe a IA fazer o trabalho pesado.
+        </p>
+      </div>
 
-          <FormField
-            label="Público-alvo"
-            htmlFor="targetAudience"
-            required
-            error={errors.targetAudience?.message}
-          >
-            <Textarea
-              id="targetAudience"
-              icon={<Users className="size-4" />}
-              placeholder="Quem é o público-alvo? (idade, interesses, comportamento...)"
-              error={!!errors.targetAudience}
-              rows={3}
-              {...register('targetAudience')}
-            />
-          </FormField>
+      <Card variant="glass">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-xl">Briefing do Anúncio</CardTitle>
+              <CardDescription>
+                Preencha as informações sobre o produto e público-alvo
+              </CardDescription>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleAutoFill}
+              className="shrink-0"
+            >
+              <Wand2 className="mr-2 h-4 w-4" />
+              Auto-preencher
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              label="Produto/Serviço"
+              htmlFor="product"
+              required
+              error={errors.product?.message}
+            >
+              <Textarea
+                id="product"
+                icon={<Package className="size-4" />}
+                placeholder="Descreva o produto ou serviço que será anunciado..."
+                error={!!errors.product}
+                rows={3}
+                {...register('product')}
+              />
+            </FormField>
 
-          <FormField
-            label="Objetivo da Campanha"
-            htmlFor="objective"
-            required
-            error={errors.objective?.message}
-          >
-            <Controller
-              name="objective"
-              control={control}
-              render={({ field }) => (
-                <div className="relative">
-                  <div className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 z-10 -translate-y-1/2">
-                    <Target className="size-4" />
+            <FormField
+              label="Público-alvo"
+              htmlFor="targetAudience"
+              required
+              error={errors.targetAudience?.message}
+            >
+              <Textarea
+                id="targetAudience"
+                icon={<Users className="size-4" />}
+                placeholder="Quem é o público-alvo? (idade, interesses, comportamento...)"
+                error={!!errors.targetAudience}
+                rows={3}
+                {...register('targetAudience')}
+              />
+            </FormField>
+
+            <FormField
+              label="Objetivo da Campanha"
+              htmlFor="objective"
+              required
+              error={errors.objective?.message}
+            >
+              <Controller
+                name="objective"
+                control={control}
+                render={({ field }) => (
+                  <div className="relative">
+                    <div className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 z-10 -translate-y-1/2">
+                      <Target className="size-4" />
+                    </div>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger
+                        className={`pl-10 ${errors.objective ? 'border-destructive' : ''}`}
+                      >
+                        <SelectValue placeholder="Selecione o objetivo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {OBJECTIVES.map((obj) => (
+                          <SelectItem key={obj.value} value={obj.value}>
+                            {obj.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger
-                      className={`pl-10 ${errors.objective ? 'border-destructive' : ''}`}
-                    >
-                      <SelectValue placeholder="Selecione o objetivo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {OBJECTIVES.map((obj) => (
-                        <SelectItem key={obj.value} value={obj.value}>
-                          {obj.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-            />
-          </FormField>
+                )}
+              />
+            </FormField>
 
-          <FormField
-            label="Diferenciais"
-            htmlFor="differentials"
-            required
-            error={errors.differentials?.message}
-          >
-            <Textarea
-              id="differentials"
-              icon={<Sparkles className="size-4" />}
-              placeholder="O que diferencia este produto/serviço da concorrência?"
-              error={!!errors.differentials}
-              rows={3}
-              {...register('differentials')}
-            />
-          </FormField>
+            <FormField
+              label="Diferenciais"
+              htmlFor="differentials"
+              required
+              error={errors.differentials?.message}
+            >
+              <Textarea
+                id="differentials"
+                icon={<Sparkles className="size-4" />}
+                placeholder="O que diferencia este produto/serviço da concorrência?"
+                error={!!errors.differentials}
+                rows={3}
+                {...register('differentials')}
+              />
+            </FormField>
 
-          <FormField
-            label="Palavras-chave obrigatórias"
-            htmlFor="requiredKeywords"
-            hint="Palavras que devem aparecer nas copies geradas"
-          >
-            <Input
-              id="requiredKeywords"
-              icon={<Tag className="size-4" />}
-              placeholder="Separe por vírgula: palavra1, palavra2, palavra3"
-              value={keywordsInput}
-              onChange={(e) => handleKeywordsChange(e.target.value)}
-            />
-          </FormField>
+            <FormField
+              label="Palavras-chave obrigatórias"
+              htmlFor="requiredKeywords"
+              hint="Palavras que devem aparecer nas copies geradas"
+            >
+              <Input
+                id="requiredKeywords"
+                icon={<Tag className="size-4" />}
+                placeholder="Separe por vírgula: palavra1, palavra2, palavra3"
+                value={keywordsInput}
+                onChange={(e) => handleKeywordsChange(e.target.value)}
+              />
+            </FormField>
 
-          <FormField
-            label="Palavras proibidas"
-            htmlFor="forbiddenWords"
-            hint="Palavras que NÃO devem aparecer nas copies geradas"
-          >
-            <Input
-              id="forbiddenWords"
-              icon={<Ban className="size-4" />}
-              placeholder="Separe por vírgula: palavra1, palavra2, palavra3"
-              value={forbiddenInput}
-              onChange={(e) => handleForbiddenChange(e.target.value)}
-            />
-          </FormField>
+            <FormField
+              label="Palavras proibidas"
+              htmlFor="forbiddenWords"
+              hint="Palavras que NÃO devem aparecer nas copies geradas"
+            >
+              <Input
+                id="forbiddenWords"
+                icon={<Ban className="size-4" />}
+                placeholder="Separe por vírgula: palavra1, palavra2, palavra3"
+                value={forbiddenInput}
+                onChange={(e) => handleForbiddenChange(e.target.value)}
+              />
+            </FormField>
 
-          <Button type="submit" variant="gradient" className="w-full" size="lg" disabled={!isValid}>
-            Próximo
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+            <Button
+              type="submit"
+              variant="gradient"
+              className="w-full"
+              size="lg"
+              disabled={!isValid}
+            >
+              Próximo
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
