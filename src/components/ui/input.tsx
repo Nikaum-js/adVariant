@@ -2,18 +2,37 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 
-const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
-  ({ className, type, ...props }, ref) => {
+export interface InputProps extends React.ComponentProps<'input'> {
+  icon?: React.ReactNode
+  error?: boolean
+}
+
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, icon, error, ...props }, ref) => {
     return (
-      <input
-        type={type}
-        className={cn(
-          'border-input file:text-foreground placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
-          className
+      <div className="relative">
+        {icon && (
+          <div className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 -translate-y-1/2">
+            {icon}
+          </div>
         )}
-        ref={ref}
-        {...props}
-      />
+        <input
+          type={type}
+          className={cn(
+            'border-border bg-input text-foreground flex h-10 w-full rounded-lg border px-3 py-2 text-base shadow-sm transition-colors',
+            'placeholder:text-placeholder',
+            'file:text-foreground file:border-0 file:bg-transparent file:text-sm file:font-medium',
+            'focus-visible:ring-ring focus-visible:border-ring focus-visible:ring-1 focus-visible:outline-none',
+            'disabled:cursor-not-allowed disabled:opacity-50',
+            'md:text-sm',
+            icon && 'pl-10',
+            error && 'border-destructive focus-visible:ring-destructive',
+            className
+          )}
+          ref={ref}
+          {...props}
+        />
+      </div>
     )
   }
 )

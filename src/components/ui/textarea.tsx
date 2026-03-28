@@ -2,17 +2,35 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 
-const Textarea = React.forwardRef<HTMLTextAreaElement, React.ComponentProps<'textarea'>>(
-  ({ className, ...props }, ref) => {
+export interface TextareaProps extends React.ComponentProps<'textarea'> {
+  icon?: React.ReactNode
+  error?: boolean
+}
+
+const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, icon, error, ...props }, ref) => {
     return (
-      <textarea
-        className={cn(
-          'border-input placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[60px] w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-sm focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
-          className
+      <div className="relative">
+        {icon && (
+          <div className="text-muted-foreground pointer-events-none absolute top-3 left-3">
+            {icon}
+          </div>
         )}
-        ref={ref}
-        {...props}
-      />
+        <textarea
+          className={cn(
+            'border-border bg-input text-foreground flex min-h-[80px] w-full rounded-lg border px-3 py-2 text-base shadow-sm transition-colors',
+            'placeholder:text-placeholder',
+            'focus-visible:ring-ring focus-visible:border-ring focus-visible:ring-1 focus-visible:outline-none',
+            'disabled:cursor-not-allowed disabled:opacity-50',
+            'md:text-sm',
+            icon && 'pl-10',
+            error && 'border-destructive focus-visible:ring-destructive',
+            className
+          )}
+          ref={ref}
+          {...props}
+        />
+      </div>
     )
   }
 )
