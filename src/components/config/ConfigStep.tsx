@@ -1,7 +1,14 @@
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card'
 import { ChannelSelector } from './ChannelSelector'
 import { ToneSelector } from './ToneSelector'
 import { QuantitySelector } from './QuantitySelector'
@@ -30,12 +37,13 @@ export function ConfigStep({ onSubmit, onBack, initialData }: ConfigStepProps) {
   })
 
   return (
-    <Card className="mx-auto w-full max-w-4xl">
+    <Card variant="glass" className="mx-auto w-full max-w-4xl">
       <CardHeader>
-        <CardTitle>Configuração da Geração</CardTitle>
+        <CardTitle className="text-xl">Configuração da Geração</CardTitle>
+        <CardDescription>Escolha o canal, tom de voz e quantidade de variações</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <CardContent className="space-y-8">
+        <CardContent className="space-y-10">
           <Controller
             name="channel"
             control={control}
@@ -61,7 +69,7 @@ export function ConfigStep({ onSubmit, onBack, initialData }: ConfigStepProps) {
             <ArrowLeft className="mr-2 h-4 w-4" />
             Voltar
           </Button>
-          <Button type="submit" disabled={!isValid}>
+          <Button type="submit" variant="gradient" disabled={!isValid}>
             <Sparkles className="mr-2 h-4 w-4" />
             Gerar Variações
           </Button>

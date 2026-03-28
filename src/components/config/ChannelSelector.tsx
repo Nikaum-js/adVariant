@@ -9,17 +9,17 @@ interface ChannelSelectorProps {
   onChange: (channel: Channel) => void
 }
 
-const CHANNELS: { value: Channel; label: string; color: string }[] = [
-  { value: 'google_ads', label: 'Google Ads', color: 'bg-blue-600' },
-  { value: 'meta_ads', label: 'Meta Ads', color: 'bg-purple-600' },
-  { value: 'linkedin_ads', label: 'LinkedIn Ads', color: 'bg-sky-600' },
+const CHANNELS: { value: Channel; label: string; icon: string }[] = [
+  { value: 'google_ads', label: 'Google Ads', icon: 'G' },
+  { value: 'meta_ads', label: 'Meta Ads', icon: 'M' },
+  { value: 'linkedin_ads', label: 'LinkedIn Ads', icon: 'in' },
 ]
 
 export function ChannelSelector({ value, onChange }: ChannelSelectorProps) {
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-lg font-medium">Canal de Anúncio</h3>
+        <h3 className="text-lg font-semibold">Canal de Anúncio</h3>
         <p className="text-muted-foreground text-sm">
           Selecione o canal para gerar copies otimizadas
         </p>
@@ -34,24 +34,37 @@ export function ChannelSelector({ value, onChange }: ChannelSelectorProps) {
             <Card
               key={channel.value}
               className={cn(
-                'hover:border-primary/50 cursor-pointer transition-all',
-                isSelected && 'border-primary ring-primary/20 ring-2'
+                'hover-lift press-scale cursor-pointer transition-all',
+                isSelected
+                  ? 'gradient-border-selected ring-primary/30 border-transparent ring-2'
+                  : 'hover:border-primary/50'
               )}
               onClick={() => onChange(channel.value)}
             >
-              <CardHeader className="pb-2">
+              <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <Badge className={channel.color}>{channel.label}</Badge>
+                  <div className="flex items-center gap-2">
+                    <div
+                      className={cn(
+                        'flex h-8 w-8 items-center justify-center rounded-lg text-sm font-bold',
+                        channel.value === 'google_ads' && 'bg-blue-500/20 text-blue-400',
+                        channel.value === 'meta_ads' && 'bg-purple-500/20 text-purple-400',
+                        channel.value === 'linkedin_ads' && 'bg-sky-500/20 text-sky-400'
+                      )}
+                    >
+                      {channel.icon}
+                    </div>
+                    <CardTitle className="text-base">{channel.label}</CardTitle>
+                  </div>
                   {isSelected && (
-                    <Badge variant="outline" className="border-primary text-primary">
+                    <Badge variant="success-muted" className="text-xs">
                       Selecionado
                     </Badge>
                   )}
                 </div>
               </CardHeader>
-              <CardContent>
-                <CardTitle className="text-base">{rules.name}</CardTitle>
-                <CardDescription className="mt-2 space-y-1">
+              <CardContent className="pt-0">
+                <CardDescription className="space-y-1 text-xs">
                   <p>Headline: até {rules.headlineLimit} caracteres</p>
                   <p>Descrição: até {rules.descriptionLimit} caracteres</p>
                 </CardDescription>
