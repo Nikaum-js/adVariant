@@ -3,10 +3,10 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { briefingSchema, type BriefingFormData } from '@/schemas/briefing'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
 import {
   Select,
   SelectContent,
@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Package, Users, Target, Sparkles, Tag, Ban } from 'lucide-react'
 
 interface BriefingFormProps {
   onSubmit: (data: BriefingFormData) => void
@@ -74,102 +74,123 @@ export function BriefingForm({ onSubmit, initialData }: BriefingFormProps) {
   }
 
   return (
-    <Card className="mx-auto w-full max-w-2xl">
+    <Card variant="glass" className="mx-auto w-full max-w-2xl">
       <CardHeader>
-        <CardTitle>Briefing do Anúncio</CardTitle>
+        <CardTitle className="text-xl">Briefing do Anúncio</CardTitle>
+        <CardDescription>Preencha as informações sobre o produto e público-alvo</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="product">Produto/Serviço *</Label>
+          <FormField
+            label="Produto/Serviço"
+            htmlFor="product"
+            required
+            error={errors.product?.message}
+          >
             <Textarea
               id="product"
+              icon={<Package className="size-4" />}
               placeholder="Descreva o produto ou serviço que será anunciado..."
-              {...register('product')}
-              className={errors.product ? 'border-red-500' : ''}
+              error={!!errors.product}
               rows={3}
+              {...register('product')}
             />
-            {errors.product && <p className="text-sm text-red-500">{errors.product.message}</p>}
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="targetAudience">Público-alvo *</Label>
+          <FormField
+            label="Público-alvo"
+            htmlFor="targetAudience"
+            required
+            error={errors.targetAudience?.message}
+          >
             <Textarea
               id="targetAudience"
+              icon={<Users className="size-4" />}
               placeholder="Quem é o público-alvo? (idade, interesses, comportamento...)"
-              {...register('targetAudience')}
-              className={errors.targetAudience ? 'border-red-500' : ''}
+              error={!!errors.targetAudience}
               rows={3}
+              {...register('targetAudience')}
             />
-            {errors.targetAudience && (
-              <p className="text-sm text-red-500">{errors.targetAudience.message}</p>
-            )}
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="objective">Objetivo da Campanha *</Label>
+          <FormField
+            label="Objetivo da Campanha"
+            htmlFor="objective"
+            required
+            error={errors.objective?.message}
+          >
             <Controller
               name="objective"
               control={control}
               render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className={errors.objective ? 'border-red-500' : ''}>
-                    <SelectValue placeholder="Selecione o objetivo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {OBJECTIVES.map((obj) => (
-                      <SelectItem key={obj.value} value={obj.value}>
-                        {obj.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="relative">
+                  <div className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 z-10 -translate-y-1/2">
+                    <Target className="size-4" />
+                  </div>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger
+                      className={`pl-10 ${errors.objective ? 'border-destructive' : ''}`}
+                    >
+                      <SelectValue placeholder="Selecione o objetivo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {OBJECTIVES.map((obj) => (
+                        <SelectItem key={obj.value} value={obj.value}>
+                          {obj.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               )}
             />
-            {errors.objective && <p className="text-sm text-red-500">{errors.objective.message}</p>}
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="differentials">Diferenciais *</Label>
+          <FormField
+            label="Diferenciais"
+            htmlFor="differentials"
+            required
+            error={errors.differentials?.message}
+          >
             <Textarea
               id="differentials"
+              icon={<Sparkles className="size-4" />}
               placeholder="O que diferencia este produto/serviço da concorrência?"
-              {...register('differentials')}
-              className={errors.differentials ? 'border-red-500' : ''}
+              error={!!errors.differentials}
               rows={3}
+              {...register('differentials')}
             />
-            {errors.differentials && (
-              <p className="text-sm text-red-500">{errors.differentials.message}</p>
-            )}
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="requiredKeywords">Palavras-chave obrigatórias</Label>
+          <FormField
+            label="Palavras-chave obrigatórias"
+            htmlFor="requiredKeywords"
+            hint="Palavras que devem aparecer nas copies geradas"
+          >
             <Input
               id="requiredKeywords"
+              icon={<Tag className="size-4" />}
               placeholder="Separe por vírgula: palavra1, palavra2, palavra3"
               value={keywordsInput}
               onChange={(e) => handleKeywordsChange(e.target.value)}
             />
-            <p className="text-muted-foreground text-sm">
-              Palavras que devem aparecer nas copies geradas
-            </p>
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <Label htmlFor="forbiddenWords">Palavras proibidas</Label>
+          <FormField
+            label="Palavras proibidas"
+            htmlFor="forbiddenWords"
+            hint="Palavras que NÃO devem aparecer nas copies geradas"
+          >
             <Input
               id="forbiddenWords"
+              icon={<Ban className="size-4" />}
               placeholder="Separe por vírgula: palavra1, palavra2, palavra3"
               value={forbiddenInput}
               onChange={(e) => handleForbiddenChange(e.target.value)}
             />
-            <p className="text-muted-foreground text-sm">
-              Palavras que NÃO devem aparecer nas copies geradas
-            </p>
-          </div>
+          </FormField>
 
-          <Button type="submit" className="w-full" disabled={!isValid}>
+          <Button type="submit" variant="gradient" className="w-full" size="lg" disabled={!isValid}>
             Próximo
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
