@@ -58,7 +58,7 @@ export function ToneSelector({ value, onChange }: ToneSelectorProps) {
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-lg font-medium">Tom de Voz</h3>
+        <h3 className="text-lg font-semibold">Tom de Voz</h3>
         <p className="text-muted-foreground text-sm">
           Escolha o tom que melhor representa sua marca
         </p>
@@ -73,19 +73,30 @@ export function ToneSelector({ value, onChange }: ToneSelectorProps) {
             <Card
               key={tone.value}
               className={cn(
-                'hover:border-primary/50 cursor-pointer transition-all',
-                isSelected && 'border-primary ring-primary/20 ring-2'
+                'hover-lift press-scale cursor-pointer transition-all',
+                isSelected
+                  ? 'gradient-border-selected ring-primary/30 border-transparent ring-2'
+                  : 'hover:border-primary/50'
               )}
               onClick={() => onChange(tone.value)}
             >
               <CardHeader className="pb-2">
-                <div className="flex items-center gap-2">
-                  <Icon className={cn('h-5 w-5', isSelected && 'text-primary')} />
-                  <span className="font-medium">{tone.label}</span>
+                <div className="flex items-center gap-3">
+                  <div
+                    className={cn(
+                      'flex h-10 w-10 items-center justify-center rounded-lg transition-colors',
+                      isSelected ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground'
+                    )}
+                  >
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <span className={cn('font-medium', isSelected && 'text-primary')}>
+                    {tone.label}
+                  </span>
                 </div>
               </CardHeader>
-              <CardContent>
-                <CardDescription>{tone.description}</CardDescription>
+              <CardContent className="pt-0">
+                <CardDescription className="text-xs">{tone.description}</CardDescription>
               </CardContent>
             </Card>
           )
