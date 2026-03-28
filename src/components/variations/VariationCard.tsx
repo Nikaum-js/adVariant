@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { CharCounter } from './CharCounter'
+import { cn } from '@/lib/utils'
 import type { Variation } from '@/types'
 
 interface VariationCardProps {
@@ -23,12 +24,6 @@ const strategyLabels: Record<string, string> = {
   transformation: 'Transformação',
 }
 
-const statusStyles = {
-  pending: '',
-  approved: 'border-success/50 bg-success-muted',
-  rejected: 'border-destructive/50 bg-destructive/5',
-}
-
 export function VariationCard({
   variation,
   headlineLimit,
@@ -37,42 +32,49 @@ export function VariationCard({
   onReject,
   onReset,
 }: VariationCardProps) {
+  const isApproved = variation.status === 'approved'
+  const isRejected = variation.status === 'rejected'
+  const isPending = variation.status === 'pending'
+
   return (
-    <Card className={statusStyles[variation.status]}>
-      <CardHeader className="pb-2">
-        <div className="flex items-center justify-between">
-          {variation.status === 'approved' ? (
-            <Badge className="bg-success text-success-foreground">Aprovado</Badge>
-          ) : variation.status === 'rejected' ? (
+    <Card
+      variant="glass"
+      className={cn(
+        'animate-in transition-all',
+        isApproved && 'ring-success/30 gradient-border-selected ring-2',
+        isRejected && 'border-destructive/30 opacity-60'
+      )}
+    >
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between gap-2">
+          {isApproved ? (
+            <Badge variant="success">Aprovado</Badge>
+          ) : isRejected ? (
             <Badge variant="destructive">Reprovado</Badge>
           ) : (
             <Badge variant="secondary">Pendente</Badge>
           )}
-          <Badge variant="outline">
+          <Badge variant="outline" className="text-xs">
             {strategyLabels[variation.strategy] || variation.strategy}
           </Badge>
         </div>
-        <CardTitle className="mt-2 text-lg">{variation.headline}</CardTitle>
-        <CardDescription className="flex items-center gap-1">
+        <CardTitle className="mt-3 text-base leading-snug">{variation.headline}</CardTitle>
+        <CardDescription className="flex items-center gap-1 text-xs">
           <CharCounter current={variation.charCount.headline} limit={headlineLimit} />
           <span className="text-muted-foreground">caracteres</span>
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <p className="text-muted-foreground text-sm">{variation.description}</p>
-        <p className="mt-2 flex items-center gap-1 text-xs">
+      <CardContent className="space-y-3">
+        <p className="text-muted-foreground text-sm leading-relaxed">{variation.description}</p>
+        <p className="flex items-center gap-1 text-xs">
           <CharCounter current={variation.charCount.description} limit={descriptionLimit} />
           <span className="text-muted-foreground">caracteres</span>
         </p>
       </CardContent>
       <div className="flex gap-2 p-4 pt-0">
-        {variation.status === 'pending' ? (
+        {isPending ? (
           <>
-            <Button
-              size="sm"
-              className="bg-success hover:bg-success/90 text-success-foreground flex-1"
-              onClick={onApprove}
-            >
+            <Button size="sm" variant="success" className="flex-1" onClick={onApprove}>
               <Check className="mr-1 h-4 w-4" />
               Aprovar
             </Button>
