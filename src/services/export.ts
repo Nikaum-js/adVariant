@@ -1,5 +1,6 @@
 import * as XLSX from 'xlsx'
 import type { Variation } from '@/types'
+import { getStrategyLabel } from '@/lib/strategyLabels'
 
 export function exportToCSV(variations: Variation[], filename = 'variacoes-aprovadas') {
   const approvedVariations = variations.filter((v) => v.status === 'approved')
@@ -54,16 +55,4 @@ export function copyApprovedToClipboard(variations: Variation[]): string {
   navigator.clipboard.writeText(text)
 
   return text
-}
-
-function getStrategyLabel(strategy: string): string {
-  const labels: Record<string, string> = {
-    social_proof: 'Prova Social',
-    direct_benefit: 'Benefício Direto',
-    scarcity: 'Escassez',
-    provocative_question: 'Pergunta Provocativa',
-    authority: 'Autoridade',
-    transformation: 'Transformação',
-  }
-  return labels[strategy] || strategy
 }
