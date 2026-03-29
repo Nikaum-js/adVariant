@@ -1,5 +1,6 @@
 {
-  // Project references for app and node configurations
+  // TypeScript project references configuration
+  // See tsconfig.app.json for app settings and tsconfig.node.json for build tools
   "files": [],
   "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }]
 }
