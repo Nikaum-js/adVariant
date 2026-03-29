@@ -1,7 +1,15 @@
 import type { Briefing, GenerationConfig, Variation, Strategy } from '@/types'
 import { CHANNEL_RULES } from '@/lib/channelRules'
+import { deepseekApi } from '@/lib/axios'
 
-const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions'
+// Re-export error classes for backward compatibility
+export {
+  ApiKeyMissingError,
+  ApiKeyInvalidError,
+  RateLimitError,
+  NetworkError,
+  getApiKey,
+} from '@/lib/axios'
 
 interface DeepSeekResponse {
   choices: {
@@ -22,98 +30,30 @@ interface ParsedVariation {
   }
 }
 
-export class ApiKeyMissingError extends Error {
-  constructor() {
-    super('API key não configurada. Adicione VITE_DEEPSEEK_API_KEY no arquivo .env')
-    this.name = 'ApiKeyMissingError'
-  }
-}
-
-export class ApiKeyInvalidError extends Error {
-  constructor() {
-    super('API key inválida. Verifique sua chave DeepSeek.')
-    this.name = 'ApiKeyInvalidError'
-  }
-}
-
-export class RateLimitError extends Error {
-  constructor() {
-    super('Rate limit atingido. Aguarde alguns segundos e tente novamente.')
-    this.name = 'RateLimitError'
-  }
-}
-
-export class NetworkError extends Error {
-  constructor() {
-    super('Erro de conexão. Verifique sua internet e tente novamente.')
-    this.name = 'NetworkError'
-  }
-}
-
-export function getApiKey(): string | null {
-  return import.meta.env.VITE_DEEPSEEK_API_KEY || null
-}
-
 export async function generateVariations(
   briefing: Briefing,
   config: GenerationConfig
 ): Promise<Variation[]> {
-  const apiKey = getApiKey()
-
-  if (!apiKey) {
-    throw new ApiKeyMissingError()
-  }
-
   const channelRules = CHANNEL_RULES[config.channel]
   const prompt = buildPrompt(briefing, config, channelRules)
 
-  let response: Response
-
-  try {
-    response = await fetch(DEEPSEEK_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
+  const { data } = await deepseekApi.post<DeepSeekResponse>('/chat/completions', {
+    model: 'deepseek-chat',
+    messages: [
+      {
+        role: 'system',
+        content:
+          'Você é um especialista em copywriting para anúncios digitais. Sempre responda em JSON válido.',
       },
-      body: JSON.stringify({
-        model: 'deepseek-chat',
-        messages: [
-          {
-            role: 'system',
-            content:
-              'Você é um especialista em copywriting para anúncios digitais. Sempre responda em JSON válido.',
-          },
-          {
-            role: 'user',
-            content: prompt,
-          },
-        ],
-        temperature: 0.8,
-        response_format: { type: 'json_object' },
-      }),
-    })
-  } catch (error) {
-    if (error instanceof TypeError && error.message.includes('fetch')) {
-      throw new NetworkError()
-    }
-    throw error
-  }
+      {
+        role: 'user',
+        content: prompt,
+      },
+    ],
+    temperature: 0.8,
+    response_format: { type: 'json_object' },
+  })
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}))
-    if (response.status === 401) {
-      throw new ApiKeyInvalidError()
-    }
-    if (response.status === 429) {
-      throw new RateLimitError()
-    }
-    throw new Error(
-      `Erro na API: ${response.status} - ${errorData.error?.message || 'Erro desconhecido'}`
-    )
-  }
-
-  const data: DeepSeekResponse = await response.json()
   const content = data.choices[0]?.message?.content
 
   if (!content) {
