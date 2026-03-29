@@ -1,6 +1,6 @@
 # AdVariant — Gerador Inteligente de Variações de Anúncio
 
-> _Do briefing às copies aprovadas em minutos, não em horas._
+> _Do briefing às copies aprovadas em minutos._
 
 ---
 
