@@ -1,6 +1,6 @@
 # Sistema de Geração com IA
 
-Documentação técnica do sistema de geração de copies do AdVariant.
+Documentação técnica do sistema de geração de variações de copy do AdVariant.
 
 ## Visão Geral
 
