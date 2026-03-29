@@ -19,50 +19,46 @@ import { ArrowRight, Package, Users, Target, Sparkles, Tag, Ban, Wand2 } from 'l
 
 const FIELD_HELP = {
   product: {
-    title: 'O que é o produto/serviço?',
-    description: 'Descreva de forma clara e detalhada o que você está anunciando.',
+    title: 'Produto ou serviço',
+    description: 'Descreva o que você está anunciando. Quanto mais detalhes, melhor a IA entende.',
     examples: [
-      'Curso online de fotografia com 50 aulas',
-      'App de delivery de comida saudável',
-      'Consultoria financeira para PMEs',
+      'Curso de fotografia com 50 aulas e certificado',
+      'App de delivery de comida fit',
+      'Consultoria financeira para pequenas empresas',
     ],
   },
   targetAudience: {
-    title: 'Quem você quer atingir?',
-    description: 'Defina idade, interesses, comportamento e características do seu público.',
+    title: 'Público-alvo',
+    description: 'Quem você quer atingir? Inclua idade, interesses e comportamento.',
     examples: [
-      'Mulheres 25-45 anos, interessadas em fitness',
-      'Empresários de pequenas empresas',
-      'Estudantes universitários buscando primeiro emprego',
+      'Mulheres 25-45 anos que praticam exercícios',
+      'Donos de pequenos negócios',
+      'Universitários em busca de estágio',
     ],
   },
   objective: {
-    title: 'Qual o objetivo da campanha?',
-    description: 'Escolha o que você espera que o público faça ao ver o anúncio.',
+    title: 'Objetivo da campanha',
+    description: 'O que você espera que o público faça ao ver o anúncio?',
     examples: [
-      'Awareness: fazer a marca ser conhecida',
-      'Leads: capturar emails/contatos',
-      'Conversão: vender diretamente',
+      'Awareness — conhecer a marca',
+      'Leads — deixar email ou contato',
+      'Conversão — comprar o produto',
     ],
   },
   differentials: {
-    title: 'O que te diferencia?',
-    description: 'Liste os pontos fortes que fazem seu produto/serviço único.',
-    examples: [
-      'Único com garantia de 90 dias',
-      'Entrega em 24h para todo Brasil',
-      'Atendimento 24/7 via WhatsApp',
-    ],
+    title: 'Diferenciais',
+    description: 'O que torna seu produto único? Liste os pontos fortes.',
+    examples: ['Garantia de 90 dias', 'Entrega em 24h', 'Suporte via WhatsApp 24/7'],
   },
   requiredKeywords: {
     title: 'Palavras obrigatórias',
-    description: 'Termos que DEVEM aparecer nas copies geradas pela IA.',
-    examples: ['grátis, exclusivo, limitado', 'inovador, premium, garantia'],
+    description: 'Termos que devem aparecer nas copies. Separe por vírgula.',
+    examples: ['grátis, exclusivo, limitado', 'premium, garantia, novo'],
   },
   forbiddenWords: {
     title: 'Palavras proibidas',
-    description: 'Termos que NÃO devem aparecer (por política da marca ou do canal).',
-    examples: ['barato, promoção, desconto', 'melhor, número 1, garantido'],
+    description: 'Termos que não podem aparecer. Útil para evitar problemas com plataformas.',
+    examples: ['barato, promoção', 'melhor do mercado, número 1'],
   },
 }
 
