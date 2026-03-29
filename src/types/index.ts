@@ -46,21 +46,3 @@ export interface GenerationConfig {
   tone: Tone
   quantity: 5 | 10 | 15 | 20
 }
-
-export const CHANNEL_RULES: Record<Channel, ChannelRules> = {
-  google_ads: {
-    name: 'Google Ads',
-    headlineLimit: 30,
-    descriptionLimit: 90,
-  },
-  meta_ads: {
-    name: 'Meta Ads',
-    headlineLimit: 40,
-    descriptionLimit: 125,
-  },
-  linkedin_ads: {
-    name: 'LinkedIn Ads',
-    headlineLimit: 70,
-    descriptionLimit: 150,
-  },
-}
