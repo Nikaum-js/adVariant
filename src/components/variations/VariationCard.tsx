@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { CharCounter } from './CharCounter'
 import { cn } from '@/lib/utils'
+import { getStrategyLabel } from '@/lib/strategyLabels'
 import type { Variation } from '@/types'
 
 interface VariationCardProps {
@@ -14,15 +15,6 @@ interface VariationCardProps {
   onApprove: () => void
   onReject: () => void
   onReset: () => void
-}
-
-const strategyLabels: Record<string, string> = {
-  social_proof: 'Prova Social',
-  direct_benefit: 'Benefício Direto',
-  scarcity: 'Escassez',
-  provocative_question: 'Pergunta',
-  authority: 'Autoridade',
-  transformation: 'Transformação',
 }
 
 export function VariationCard({
@@ -56,7 +48,7 @@ export function VariationCard({
             <Badge variant="secondary">Pendente</Badge>
           )}
           <Badge variant="outline" className="text-xs">
-            {strategyLabels[variation.strategy] || variation.strategy}
+            {getStrategyLabel(variation.strategy)}
           </Badge>
         </div>
         <CardTitle className="mt-3 text-base leading-snug">{variation.headline}</CardTitle>
@@ -80,7 +72,7 @@ export function VariationCard({
                 <Button
                   size="sm"
                   variant="outline"
-                  className="flex-1 border-success/30 bg-success/10 text-success hover:bg-success hover:text-success-foreground"
+                  className="border-success/30 bg-success/10 text-success hover:bg-success hover:text-success-foreground flex-1"
                   onClick={onApprove}
                 >
                   <ThumbsUp className="mr-1.5 h-4 w-4" />
@@ -94,7 +86,7 @@ export function VariationCard({
                 <Button
                   size="sm"
                   variant="outline"
-                  className="flex-1 border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                  className="border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive hover:text-destructive-foreground flex-1"
                   onClick={onReject}
                 >
                   <ThumbsDown className="mr-1.5 h-4 w-4" />

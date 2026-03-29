@@ -41,16 +41,12 @@ describe('VariationCard', () => {
   })
 
   it('should display Aprovado badge for approved status', () => {
-    render(
-      <VariationCard {...defaultProps} variation={createVariation({ status: 'approved' })} />
-    )
+    render(<VariationCard {...defaultProps} variation={createVariation({ status: 'approved' })} />)
     expect(screen.getByText('Aprovado')).toBeInTheDocument()
   })
 
   it('should display Reprovado badge for rejected status', () => {
-    render(
-      <VariationCard {...defaultProps} variation={createVariation({ status: 'rejected' })} />
-    )
+    render(<VariationCard {...defaultProps} variation={createVariation({ status: 'rejected' })} />)
     expect(screen.getByText('Reprovado')).toBeInTheDocument()
   })
 
@@ -61,16 +57,12 @@ describe('VariationCard', () => {
   })
 
   it('should show reset button for approved status', () => {
-    render(
-      <VariationCard {...defaultProps} variation={createVariation({ status: 'approved' })} />
-    )
+    render(<VariationCard {...defaultProps} variation={createVariation({ status: 'approved' })} />)
     expect(screen.getByRole('button', { name: /voltar para pendente/i })).toBeInTheDocument()
   })
 
   it('should show reset button for rejected status', () => {
-    render(
-      <VariationCard {...defaultProps} variation={createVariation({ status: 'rejected' })} />
-    )
+    render(<VariationCard {...defaultProps} variation={createVariation({ status: 'rejected' })} />)
     expect(screen.getByRole('button', { name: /voltar para pendente/i })).toBeInTheDocument()
   })
 
@@ -115,7 +107,7 @@ describe('VariationCard', () => {
       { key: 'social_proof', label: 'Prova Social' },
       { key: 'direct_benefit', label: 'Benefício Direto' },
       { key: 'scarcity', label: 'Escassez' },
-      { key: 'provocative_question', label: 'Pergunta' },
+      { key: 'provocative_question', label: 'Pergunta Provocativa' },
       { key: 'authority', label: 'Autoridade' },
       { key: 'transformation', label: 'Transformação' },
     ]
