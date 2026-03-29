@@ -532,6 +532,40 @@
 > **A IA deve atualizar esta seção SEMPRE que marcar checkboxes.**
 > Adicione uma nova entrada no topo (mais recente primeiro).
 
+### [2026-03-29] — Sessão 7 (Reescrita do README)
+
+**Concluído:**
+
+- [x] **README.md Reescrito com Estrutura Narrativa**
+  - Adicionado tagline: "Do briefing às copies aprovadas em minutos"
+  - Seção "O Problema" — narrativa do dia-a-dia de agências
+  - Seção "A Solução" — explicação do fluxo
+  - Seção "Quem Usa e Quando" — tabela com perfis e momentos de uso
+  - Seção "Como Funciona" — 5 passos do fluxo
+  - Seção "O Diferencial Técnico" — documenta iteração (margem fixa → proporcional → dinâmica)
+  - Few-shot examples calibrados explicados
+  - Taxas de aprovação por canal (95% Google, 75% Meta, 100% LinkedIn)
+  - Stack técnica em tabela
+  - Instruções de instalação simplificadas
+  - Links para documentação adicional (PRODUCT.md, AI.md, TECHNICAL_DECISIONS.md, STACK.md)
+
+**Objetivo:** Atender requisitos do desafio técnico:
+
+- Explicar problema identificado
+- Mostrar raciocínio técnico
+- Deixar claro quem usa e quando
+- README que vai além do técnico
+
+**Build:** N/A (apenas documentação)
+
+**Próximos passos:**
+
+- [ ] Adicionar URL de deploy quando disponível
+- [ ] M8 — Polimento (UX + Performance)
+- [ ] M9 — Deploy
+
+---
+
 ### [2026-03-29] — Sessão 6 (Limpeza de Código)
 
 **Concluído:**
