@@ -119,19 +119,22 @@ describe('generationConfigSchema', () => {
   })
 
   it('should reject missing channel', () => {
-    const { channel: _, ...configWithoutChannel } = validConfig
+    const { channel: _channel, ...configWithoutChannel } = validConfig
+    void _channel
     const result = generationConfigSchema.safeParse(configWithoutChannel)
     expect(result.success).toBe(false)
   })
 
   it('should reject missing tone', () => {
-    const { tone: _, ...configWithoutTone } = validConfig
+    const { tone: _tone, ...configWithoutTone } = validConfig
+    void _tone
     const result = generationConfigSchema.safeParse(configWithoutTone)
     expect(result.success).toBe(false)
   })
 
   it('should reject missing quantity', () => {
-    const { quantity: _, ...configWithoutQuantity } = validConfig
+    const { quantity: _quantity, ...configWithoutQuantity } = validConfig
+    void _quantity
     const result = generationConfigSchema.safeParse(configWithoutQuantity)
     expect(result.success).toBe(false)
   })
