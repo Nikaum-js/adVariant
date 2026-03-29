@@ -1,6 +1,6 @@
 # STACK.md — Guia Técnico para Desenvolvimento
 
-> Este documento define a stack tecnológica e padrões que a IA deve seguir ao desenvolver o AdVariant.
+> Este documento define a stack tecnológica e padrões de código do AdVariant.
 
 ---
 
