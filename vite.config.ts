@@ -2,6 +2,7 @@ import path from 'path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+// Vite configuration for AdVariant
 export default defineConfig({
   plugins: [react()],
   resolve: {
