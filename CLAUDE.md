@@ -62,4 +62,5 @@ Execute os testes antes de commitar alterações significativas:
 ```bash
 pnpm test:run    # Roda testes uma vez
 pnpm test        # Roda testes em modo watch
+pnpm build       # Build com lint e testes
 ```
