@@ -31,6 +31,8 @@ Emojis por tipo:
 - ✅ test (testes)
 - ⚙️ config (configuração)
 - 🔧 chore (manutenção)
+- 🚀 deploy (deploy/release)
+- 🔒 security (segurança)
 
 Exemplo válido:
 "✨ feat: add Toast component"
