@@ -532,6 +532,45 @@
 > **A IA deve atualizar esta seção SEMPRE que marcar checkboxes.**
 > Adicione uma nova entrada no topo (mais recente primeiro).
 
+### [2026-03-29] — Sessão 6 (Limpeza de Código)
+
+**Concluído:**
+
+- [x] **Remoção de Código Duplicado**
+  - Removido `CHANNEL_RULES` duplicado de `src/types/index.ts` (já existe em `src/lib/channelRules.ts`)
+  - Criado `src/lib/strategyLabels.ts` com constante e função compartilhadas
+  - Refatorado `src/services/export.ts` para usar import compartilhado
+  - Refatorado `src/components/variations/VariationCard.tsx` para usar import compartilhado
+
+- [x] **Remoção de CSS Não Utilizado (`src/index.css`)**
+  - Removido `.bg-glow-top`
+  - Removido `.bg-glow-center`
+  - Removido `.badge-primary`, `.badge-accent`, `.badge-success`
+  - Removido `.card-elevated`
+  - Removido `.btn-primary-hover`, `.btn-primary-active`
+
+- [x] **Simplificação de Código**
+  - Removidos comentários JSDoc redundantes em `src/services/deepseek.ts`
+
+- [x] **Correção de Lint**
+  - Adicionado `eslint-disable` em `src/test/utils.tsx` (arquivo de teste, não componente)
+  - Corrigido variáveis não utilizadas em `src/schemas/briefing.test.ts`
+
+- [x] **Build Script Melhorado**
+  - `pnpm build` agora executa: `eslint --fix` → `vitest run` → `tsc -b` → `vite build`
+  - Build falha imediatamente se lint ou testes falharem
+
+**Build:** `pnpm build` passou sem erros
+**Testes:** `pnpm test:run` — 115 testes passando
+**Lint:** `pnpm lint` — 0 erros
+
+**Próximos passos:**
+
+- [ ] M8 — Polimento (UX + Performance)
+- [ ] M9 — Deploy
+
+---
+
 ### [2026-03-29] — Sessão 5 (Documentação do Sistema de IA)
 
 **Concluído:**
