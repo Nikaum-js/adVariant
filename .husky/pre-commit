@@ -1,2 +1,3 @@
 # Run lint-staged before commit to ensure code quality
+# This checks formatting and linting on staged files only
 pnpm exec lint-staged
