@@ -1,5 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
+  "name": "advariant",
   "style": "new-york",
   "rsc": false,
   "tsx": true,
