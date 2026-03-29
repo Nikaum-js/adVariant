@@ -101,10 +101,6 @@ function getToneDescription(tone: string): string {
   return tones[tone] || tone
 }
 
-/**
- * Calcula o limite efetivo com margem proporcional ao tamanho
- * Limites menores precisam de mais margem, limites maiores precisam de menos
- */
 function getEffectiveLimit(limit: number): number {
   if (limit <= 40) {
     return Math.floor(limit * 0.85) // 15% margem
@@ -115,10 +111,6 @@ function getEffectiveLimit(limit: number): number {
   }
 }
 
-/**
- * Gera exemplos few-shot calibrados por canal
- * Exemplos usam ~70% do limite para mostrar o tamanho esperado
- */
 function generateFewShotExamples(headlineLimit: number): string {
   let examples: { headline: string; description: string }[]
 
