@@ -4,9 +4,9 @@ import { GenerationError } from '@/components/generation/GenerationError'
 import { ReviewHeader } from '@/components/review/ReviewHeader'
 import { VariationGrid } from '@/components/variations/VariationGrid'
 import { LoadingScreen } from '@/components/ui/loading-screen'
-import type { Step } from '@/hooks/useFlow'
 import type { BriefingFormData, GenerationConfigData } from '@/schemas/briefing'
 import type { Variation, VariationStatus, ChannelRules } from '@/types'
+import type { Step } from '@/hooks/useFlow'
 
 interface MainProps {
   step: Step
